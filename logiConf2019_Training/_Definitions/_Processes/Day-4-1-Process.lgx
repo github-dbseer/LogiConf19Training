@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Process
+	ID="Day-4-1-Process"
+	>
+	<Task
+		ID="task1-Process"
+		>
+		<Response
+			ID="rspReport"
+			Type="Report"
+			>
+			<Target
+				Report="Processes.Workshop2.Process"
+				Type="Report"
+			/>
+			<LinkParams
+				status="Welcome From the Process :)"
+			/>
+		</Response>
+	</Task>
+	<Task
+		ID="task2-Process"
+		>
+		<Procedure
+			Expression="&apos;@Request.inp-firstname~&apos;!=&apos;&apos; &amp;&amp;  &apos;@Request.inp-lastname~&apos;!= &apos;&apos;"
+			ID="ifNotEmptyFirstNameAndLastName"
+			Type="If"
+			>
+			<Response
+				ID="rspReport"
+				Type="Report"
+				>
+				<Target
+					Report="Processes.Workshop2.Process"
+					Type="Report"
+				/>
+				<LinkParams
+					results="@Request.inp-firstname~ @Request.inp-lastname~"
+					status2="1"
+				/>
+			</Response>
+		</Procedure>
+		<Procedure
+			Expression="&apos;@Request.inp-firstname~&apos;==&apos;&apos; or  &apos;@Request.inp-lastname~&apos;== &apos;&apos;"
+			ID="ifEmptyFirstNameOrLastName"
+			Type="If"
+			>
+			<Response
+				ID="rspReport"
+				Type="Report"
+				>
+				<Target
+					Report="Processes.Workshop2.Process"
+					Type="Report"
+				/>
+				<LinkParams
+					status2="0"
+				/>
+			</Response>
+		</Procedure>
+	</Task>
+	<Task
+		ID="task3-Process"
+		>
+		<Response
+			ID="actLink"
+			Type="Link"
+			>
+			<Target
+				ID="trgtGoogle"
+				Link="rdPage.aspx?rdReport=Processes.Workshop2.Process"
+				Type="Link"
+			/>
+			<Remark>
+				<Target
+					ID="trgtGoogle"
+					Link="http://www.google.com"
+					Type="Link"
+				/>
+			</Remark>
+			<LinkParams
+				status3="URL navigation 345"
+			/>
+		</Response>
+	</Task>
+	<ideTestParams
+		inp-firstname=""
+		inp-lastname=""
+		rdTaskID=""
+	/>
+</Process>

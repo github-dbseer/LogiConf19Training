@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Security.Workshop1.Security-Authentication"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<DefaultRequestParams
+		name="SubMenu1.1"
+	/>
+	<Body>
+		<Division
+			ID="divUserDetails"
+			>
+			<Label
+				Caption="Welcome @Function.UserName~ you got authenticated "
+				Class="text-muted"
+				HtmlTag="H3"
+			/>
+			<HR/>
+			<Label
+				Caption="Your name &quot;@Session.UserFullName~&quot; is saved as a session during our startup process "
+				Class="text-muted"
+				HtmlTag="H6"
+			/>
+		</Division>
+	</Body>
+	<ideTestParams/>
+</Report>

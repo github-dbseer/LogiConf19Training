@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Security.Workshop3.Security-ColumnRowLevelSecurity"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<DefaultRequestParams
+		name="SubMenu1.1"
+	/>
+	<StyleSheet
+		StyleSheet="css.Pagination.css"
+	/>
+	<Body>
+		<Division
+			ID="divUserDetails"
+			>
+			<Label
+				Caption="You loged in as &quot;@Function.UserName~&quot; ."
+				Class="text-muted"
+				HtmlTag="H6"
+			/>
+			<LineBreak/>
+			<Label
+				Caption="Your Role is &quot;@Function.UserRoles~&quot; ."
+				Class="text-muted"
+				HtmlTag="H6"
+			/>
+			<LineBreak/>
+			<Label
+				Caption="Your Rights are &quot;@Function.UserRights~&quot; ."
+				Class="text-muted"
+				HtmlTag="H6"
+			/>
+		</Division>
+		<LineBreak/>
+		<DataTable
+			AccessibleHeaders="True"
+			AccessibleSummary="DataTable"
+			Class="table table-striped table-bordered table-responsive d-block-important border-0"
+			ColumnHeaderClass="text-dark text-center text-decoration-non"
+			ID="dtEmployees"
+			KeepScrollPosition="True"
+			RememberSort="True"
+			ResizableColumns="True"
+			SortArrows="True"
+			TableBorder="0"
+			Width="100"
+			WidthScale="%"
+			>
+			<DataLayer
+				ConnectionID="MySQLServer"
+				ID="dlEmployees"
+				Source="Select p.FirstName,
+  p.LastName,
+  em.LoginID,
+  em.JobTitle,
+  em.HireDate,
+  a.AddressLine1 As Address,
+  a.City,
+  cr.Name As Country,
+  sp.Name As Region,
+  a.PostalCode,
+  pp.PhoneNumber,
+  ea.EmailAddress,
+  em.NationalIDNumber,
+  em.BirthDate,
+  em.MaritalStatus
+From AdventureWorks2017.HumanResources.Employee As em
+  Inner Join AdventureWorks2017.Person.Person As p On em.BusinessEntityID = p.BusinessEntityID
+  Inner Join AdventureWorks2017.Person.BusinessEntityAddress bea On bea.BusinessEntityID =
+    em.BusinessEntityID
+  Inner Join AdventureWorks2017.Person.Address a On a.AddressID = bea.AddressID
+  Inner Join AdventureWorks2017.Person.StateProvince sp On sp.StateProvinceID = a.StateProvinceID
+  Inner Join AdventureWorks2017.Person.CountryRegion cr On cr.CountryRegionCode =
+    sp.CountryRegionCode
+  Left Outer Join AdventureWorks2017.Person.PersonPhone pp On pp.BusinessEntityID =
+    p.BusinessEntityID
+  Left Outer Join AdventureWorks2017.Person.EmailAddress ea On p.BusinessEntityID =
+    ea.BusinessEntityID
+WHERE 
+	cr.Name IN (SELECT * FROM STRING_SPLIT(@CountryCode,&apos;,&apos;))
+"
+				Type="SQL"
+				>
+				<SqlParameters>
+					<SqlParameter
+						ID="CountryCode"
+						SqlParamType="dt-129"
+						Value="@Function.UserRights~"
+					/>
+				</SqlParameters>
+				<CompareFilter
+					CompareType="ContainsAny"
+					CompareValue="@Function.UserRights~"
+					DataColumn="Country"
+					ID="CountryAccess"
+				/>
+			</DataLayer>
+			<InteractivePaging
+				CaptionType="Text"
+				HideShowPrevNextCaptions="True"
+				HideWhenOnePage="True"
+				Location="Top"
+				PageRowCount="20"
+				ShowPageNumber="Numbered"
+			/>
+			<DataTableColumn
+				Header="FirstName"
+				ID="colFirstName"
+				>
+				<Label
+					Caption="@Data.FirstName~"
+					ID="lblFirstName"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="FirstName"
+					DataType="Text"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="LastName"
+				ID="colLastName"
+				>
+				<Label
+					Caption="@Data.LastName~"
+					ID="lblLastName"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="LastName"
+					DataType="Text"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="JobTitle"
+				ID="colJobTitle"
+				>
+				<Label
+					Caption="@Data.JobTitle~"
+					ID="lblJobTitle"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="JobTitle"
+					DataType="Text"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="HireDate"
+				ID="colHireDate"
+				>
+				<Label
+					Caption="@Data.HireDate~"
+					Format="Short Date"
+					ID="lblHireDate"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="HireDate"
+					DataType="Date"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="NationalIDNumber"
+				ID="colNationalIDNumber"
+				SecurityRightID="TopAccess"
+				>
+				<Label
+					Caption="@Data.NationalIDNumber~"
+					ID="lblNationalIDNumber"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="NationalIDNumber"
+					DataType="Text"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="BirthDate"
+				ID="colBirthDate"
+				SecurityRightID="HR"
+				>
+				<Label
+					Caption="@Data.BirthDate~"
+					Format="Short Date"
+					ID="lblBirthDate"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="BirthDate"
+					DataType="Date"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="City"
+				ID="colCity"
+				>
+				<Label
+					Caption="@Data.City~"
+					ID="lblCity"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="City"
+					DataType="Text"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="Country"
+				ID="colCountry"
+				>
+				<Label
+					Caption="@Data.Country~"
+					ID="lblCountry"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="Country"
+					DataType="Text"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="PhoneNumber"
+				ID="colPhoneNumber"
+				SecurityRightID="TopAccess"
+				>
+				<Label
+					Caption="@Data.PhoneNumber~"
+					ID="lblPhoneNumber"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="PhoneNumber"
+					DataType="Text"
+				/>
+			</DataTableColumn>
+		</DataTable>
+	</Body>
+	<ideTestParams/>
+</Report>

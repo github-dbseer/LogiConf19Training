@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Security.Workshop2.Security-Authorization"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<DefaultRequestParams
+		name="SubMenu1.1"
+	/>
+	<Body>
+		<Division
+			ID="divUserDetails"
+			>
+			<Label
+				Caption="You loged in as &quot;@Function.UserName~&quot; ."
+				Class="text-muted"
+				HtmlTag="H6"
+			/>
+			<HR/>
+			<Label
+				Caption="Your Roles are &quot;@Function.UserRoles~&quot;"
+				Class="text-muted"
+				HtmlTag="H6"
+			/>
+			<HR/>
+			<Label
+				Caption="Your Rights are &quot;@Function.UserRights~&quot;"
+				Class="text-muted"
+				HtmlTag="H6"
+			/>
+			<HR/>
+		</Division>
+		<Division
+			ID="divAccess"
+			>
+			<Label
+				Caption="All Users have access to this label."
+				Class="text-muted"
+				HtmlTag="H6"
+			/>
+			<Label
+				Caption="You have access to this label if you have View right."
+				Class="text-muted"
+				HtmlTag="H6"
+				SecurityRightID="View"
+			/>
+			<Label
+				Caption="You do not  have access to  this label unless you have Execute or Edit Rigths."
+				Class="text-muted"
+				HtmlTag="H6"
+				SecurityRightID="Execute,Edit"
+			/>
+		</Division>
+	</Body>
+	<ideTestParams/>
+</Report>

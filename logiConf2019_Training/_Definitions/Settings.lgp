@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+  <CollapsedDef>
+    <File Name="C:\inetpub\wwwroot\LogiConf2019_Training\_Definitions\_Reports\MasterReport.lgx">
+      <Element Key="0" />
+      <Element Key="0\0" />
+      <Element Key="2\0\0\0\0\0\2\0\3" />
+      <Element Key="2\0\2\1\4\0" />
+      <Element Key="2\0\3" />
+      <Element Key="2\1" />
+    </File>
+    <File Name="C:\inetpub\wwwroot\LogiConf2019_Training\_Definitions\_Processes\StartSession.lgx">
+      <Element Key="" />
+    </File>
+    <File Name="C:\inetpub\wwwroot\LogiConf2019_Training\_Definitions\_Reports\Security.Workshop3.Security-ColumnRowLevelSecurity.lgx">
+      <Element Key="3\0" />
+      <Element Key="3\2\0" />
+      <Element Key="3\2\2" />
+      <Element Key="3\2\3" />
+      <Element Key="3\2\4" />
+      <Element Key="3\2\5" />
+      <Element Key="3\2\6" />
+      <Element Key="3\2\7" />
+      <Element Key="3\2\8" />
+      <Element Key="3\2\9" />
+      <Element Key="3\2\10" />
+    </File>
+    <File Name="C:\inetpub\wwwroot\LogiConf2019_Training\_Definitions\_Reports\Chart.Workshop1.ComboChart.lgx">
+      <Element Key="2\0\0\5" />
+      <Element Key="2\0\0\6" />
+      <Element Key="2\0\0\7" />
+    </File>
+    <File Name="C:\inetpub\wwwroot\LogiConf2019_Training\_Definitions\_Settings.lgx">
+      <Element Key="10" />
+      <Element Key="10\1" />
+      <Element Key="10\2" />
+    </File>
+    <File Name="C:\inetpub\wwwroot\LogiConf2019_Training\_Definitions\_Reports\Embedded_Analytics.Workshop2.lgx">
+      <Element Key="1" />
+    </File>
+  </CollapsedDef>
+</Settings>

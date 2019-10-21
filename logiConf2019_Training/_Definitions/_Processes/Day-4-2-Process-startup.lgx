@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Process
+	ID="Day-4-2-Process-startup"
+	>
+	<Task
+		ID="tskSestSession"
+		>
+		<Procedure
+			ID="setSession"
+			Type="SetSessionVars"
+			>
+			<SessionParams
+				startusername="Mahyar"
+			/>
+		</Procedure>
+		<Procedure
+			ID="setConnectoinStringSession"
+			Type="SetSessionVars"
+			>
+			<SessionParams
+				databaseName="AdventureWorks2016CTP3"
+				dbPassword="dbseer"
+				dbUser="dbseer"
+				serverName="DESKTOP-4NQ6G8G"
+			/>
+		</Procedure>
+		<Procedure
+			ID="dtlRFullName"
+			Type="RunDataLayerRows"
+			>
+			<DataLayer
+				ConnectionID="MySQLServer"
+				ID="dtlFullname"
+				Source="Select P.BusinessEntityID as UserId, FirstName+&apos; &apos;+LastName FullUserName From [Person].[Person] P
+	Inner join [Person].[EmailAddress] E on P.BusinessEntityID=E.BusinessEntityID
+	where [EmailAddress]=&apos;@Function.UserName~&apos;"
+				Type="SQL"
+			/>
+			<Procedure
+				ID="SetFullNameSession"
+				Type="SetSessionVars"
+				>
+				<SessionParams
+					rdUserid="@Data.UserId~"
+					UserFullName="@Data.FullUserName~"
+					userid="@Data.UserId~"
+				/>
+			</Procedure>
+		</Procedure>
+	</Task>
+	<ideTestParams
+		rdTaskID=""
+	/>
+</Process>

@@ -1,0 +1,490 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Crosstab.Workshop4.CoolOne"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<DefaultRequestParams
+		name="Workshop4-CoolOne"
+	/>
+	<Note>
+		<Note
+			Note="Crosstab - Workshop 1 - Cool One!"
+		/>
+	</Note>
+	<Body>
+		<Division
+			Class="card"
+			ID="divChart"
+			>
+			<Rows>
+				<Row>
+					<Column
+						Width="100"
+						WidthScale="%"
+						>
+						<Rows
+							Width="100"
+							WidthScale="%"
+							>
+							<Row>
+								<Column
+									Width="25"
+									WidthScale="%"
+								/>
+								<Column>
+									<CrosstabTable
+										Class="hmap"
+										ID="xt-ms-qoe-hm-to-location"
+										>
+										<DataLayer
+											ConnectionID="MySQLServer"
+											ID="dl-xt-to-hmap"
+											Source="SELECT day,
+       hour,
+       calls,
+       CASE
+           /* red */
+           WHEN calls BETWEEN 0 AND 20 THEN &apos;@Constant.heatmap_red_shade1~&apos;
+           WHEN calls BETWEEN 21 AND 40 THEN &apos;@Constant.heatmap_red_shade2~&apos;
+           WHEN calls BETWEEN 41 AND 60 THEN &apos;@Constant.heatmap_red_shade3~&apos;
+           /* yellow */
+           WHEN calls BETWEEN 61 AND 80 THEN &apos;@Constant.heatmap_yellow_shade1~&apos;
+           WHEN calls BETWEEN 81 AND 100 THEN &apos;@Constant.heatmap_yellow_shade2~&apos;
+           WHEN calls BETWEEN 101 AND 120 THEN &apos;@Constant.heatmap_yellow_shade3~&apos;
+           /* green */
+           WHEN calls BETWEEN 121 AND 140 THEN &apos;@Constant.heatmap_green_shade1~&apos;
+           WHEN calls BETWEEN 141 AND 160 THEN &apos;@Constant.heatmap_green_shade2~&apos;
+           WHEN calls &gt; 160 THEN &apos;@Constant.heatmap_green_shade3~&apos;
+           END AS color
+FROM (
+         SELECT CASE
+                    WHEN DAY(generated_date.date) = 7 THEN &apos;Sat&apos;
+                    WHEN DAY(generated_date.date) = 6 THEN &apos;Fri&apos;
+                    WHEN DAY(generated_date.date) = 5 THEN &apos;Thu&apos;
+                    WHEN DAY(generated_date.date) = 4 THEN &apos;Wedy&apos;
+                    WHEN DAY(generated_date.date) = 3 THEN &apos;Tue&apos;
+                    WHEN DAY(generated_date.date) = 2 THEN &apos;Mon&apos;
+                    WHEN DAY(generated_date.date) = 1 THEN &apos;Sun&apos;
+                    END                             AS day,
+                DATEPART(HOUR, generated_date.date) AS hour,
+                ABS(CHECKSUM(NEWID())) % 240 + 1    as calls
+         FROM (
+                  SELECT TOP (168) DATEADD(HOUR, ROW_NUMBER() OVER (ORDER BY a.object_id) - 1,
+                                           &apos;2013-01-01 00:00&apos;) as date
+                  FROM sys.all_objects a
+                           CROSS JOIN sys.all_objects b
+              ) generated_date
+     ) data
+UNION ALL
+SELECT &apos;day/hour&apos;                          as day,
+       DATEPART(HOUR, generated_date.date) as hour,
+       DATEPART(HOUR, generated_date.date) as calls,
+       Null                                as color
+FROM (
+         SELECT TOP (24) DATEADD(HOUR, ROW_NUMBER() OVER (ORDER BY a.object_id) - 1, &apos;2013-01-01 00:00&apos;) as date
+         FROM sys.all_objects a
+                  CROSS JOIN sys.all_objects b
+     ) generated_date;
+	 "
+											Type="SQL"
+											>
+											<CrosstabFilter
+												CrosstabColumn="hour"
+												CrosstabLabelColumn="day"
+												CrosstabValueColumn="calls"
+												CrosstabValueFunction="Any"
+												ID="ms-heatmap-to-server"
+												>
+												<ExtraCrosstabValueColumn
+													CrosstabValueColumn="color"
+													CrosstabValueFunction="Any"
+													ID="xcol_color"
+												/>
+											</CrosstabFilter>
+										</DataLayer>
+										<CrosstabTableLabelColumn
+											Header="day"
+											ID="day"
+											>
+											<Label
+												Caption="@Data.day~"
+												Class="text-dark"
+											/>
+										</CrosstabTableLabelColumn>
+										<CrosstabTableValueColumns
+											Header="@Data.rdCrosstabColumn~"
+											ID="hour"
+											>
+											<HtmlTag
+												Class="tcell text-dark"
+												HtmlTagName="div"
+												HtmlTagText="@Data.rdCrosstabValue~"
+												>
+												<HtmlAttributeParams
+													style="background-color:@Data.rdCrosstabValue-xcol_color~;"
+												/>
+											</HtmlTag>
+										</CrosstabTableValueColumns>
+									</CrosstabTable>
+								</Column>
+								<Column
+									Width="40"
+									WidthScale="%"
+									>
+									<Division>
+										<ChartCanvas
+											AutoQuicktip="False"
+											ChartHeight="225"
+											ChartWidth="75"
+											Class="color-range"
+											NoDebuggerLink="True"
+											SpacingBottom="25"
+											>
+											<DataLayer
+												ConnectionID="MySQLServer"
+												ID="dl-color-ranges"
+												Source="SELECT 0 AS x_col,
+11 AS bar_height,
+&apos;&gt;180&apos; AS range_value1, &apos;@Constant.heatmap_red_shade1~&apos; AS color_value1,
+&apos;160&apos; AS range_value2, &apos;@Constant.heatmap_red_shade2~&apos; AS color_value2,
+&apos;140&apos; AS range_value3, &apos;@Constant.heatmap_red_shade3~&apos; AS color_value3,
+&apos;120&apos; AS range_value4, &apos;@Constant.heatmap_yellow_shade1~&apos; AS color_value4,
+&apos;100&apos; AS range_value5, &apos;@Constant.heatmap_yellow_shade2~&apos; AS color_value5,
+&apos;80&apos; AS range_value6, &apos;@Constant.heatmap_yellow_shade3~&apos; AS color_value6,
+&apos;60&apos; AS range_value7, &apos;@Constant.heatmap_green_shade1~&apos; AS color_value7,
+&apos;40&apos; AS range_value8, &apos;@Constant.heatmap_green_shade2~&apos; AS color_value8,
+&apos;20&apos; AS range_value9, &apos;@Constant.heatmap_green_shade3~&apos; AS color_value9; "
+												Type="SQL"
+												>
+												<CalculatedColumn
+													Formula="@Data.bar_height~*1"
+													ID="bar_height1"
+												/>
+												<CalculatedColumn
+													Formula="@Data.bar_height~*2"
+													ID="bar_height2"
+												/>
+												<CalculatedColumn
+													Formula="@Data.bar_height~*3"
+													ID="bar_height3"
+												/>
+												<CalculatedColumn
+													Formula="@Data.bar_height~*4"
+													ID="bar_height4"
+												/>
+												<CalculatedColumn
+													Formula="@Data.bar_height~*5"
+													ID="bar_height5"
+												/>
+												<CalculatedColumn
+													Formula="@Data.bar_height~*6"
+													ID="bar_height6"
+												/>
+												<CalculatedColumn
+													Formula="@Data.bar_height~*7"
+													ID="bar_height7"
+												/>
+												<CalculatedColumn
+													Formula="@Data.bar_height~*8"
+													ID="bar_height8"
+												/>
+												<CalculatedColumn
+													Formula="@Data.bar_height~*9"
+													ID="bar_height9"
+												/>
+											</DataLayer>
+											<Note
+												Note="Green"
+											/>
+											<Series
+												BarBorderColorTransparency="15"
+												BarBorderThickness="0"
+												BarStacking="Stacked"
+												BarThickness="18"
+												ChartXDataColumn="x_col"
+												ChartYDataColumn="bar_height"
+												Color="@Data.color_value1~,"
+												ID="s9"
+												LinkedToYAxisID="y"
+												StackGroupName="stack1"
+												Type="Bar"
+											/>
+											<Series
+												BarBorderColorTransparency="15"
+												BarBorderThickness="0"
+												BarStacking="Stacked"
+												BarThickness="18"
+												ChartXDataColumn="x_col"
+												ChartYDataColumn="bar_height"
+												Color="@Data.color_value2~,"
+												ID="s8"
+												LinkedToYAxisID="y"
+												StackGroupName="stack1"
+												Type="Bar"
+											/>
+											<Series
+												BarBorderColorTransparency="15"
+												BarBorderThickness="0"
+												BarStacking="Stacked"
+												BarThickness="18"
+												ChartXDataColumn="x_col"
+												ChartYDataColumn="bar_height"
+												Color="@Data.color_value3~,"
+												ID="s7"
+												LinkedToYAxisID="y"
+												StackGroupName="stack1"
+												Type="Bar"
+											/>
+											<Note
+												Note="Yellow"
+											/>
+											<Series
+												BarBorderColorTransparency="15"
+												BarBorderThickness="0"
+												BarStacking="Stacked"
+												BarThickness="18"
+												ChartXDataColumn="x_col"
+												ChartYDataColumn="bar_height"
+												Color="@Data.color_value4~,"
+												ID="s6"
+												LinkedToYAxisID="y"
+												StackGroupName="stack1"
+												Type="Bar"
+											/>
+											<Series
+												BarBorderColorTransparency="15"
+												BarBorderThickness="0"
+												BarStacking="Stacked"
+												BarThickness="18"
+												ChartXDataColumn="x_col"
+												ChartYDataColumn="bar_height"
+												Color="@Data.color_value5~,"
+												ID="s5"
+												LinkedToYAxisID="y"
+												StackGroupName="stack1"
+												Type="Bar"
+											/>
+											<Series
+												BarBorderColorTransparency="15"
+												BarBorderThickness="0"
+												BarStacking="Stacked"
+												BarThickness="18"
+												ChartXDataColumn="x_col"
+												ChartYDataColumn="bar_height"
+												Color="@Data.color_value6~,"
+												ID="s4"
+												LinkedToYAxisID="y"
+												StackGroupName="stack1"
+												Type="Bar"
+											/>
+											<Note
+												Note="Red"
+											/>
+											<Series
+												BarBorderColorTransparency="15"
+												BarBorderThickness="0"
+												BarStacking="Stacked"
+												BarThickness="18"
+												ChartXDataColumn="x_col"
+												ChartYDataColumn="bar_height"
+												Color="@Data.color_value7~,"
+												ID="s3"
+												LinkedToYAxisID="y"
+												StackGroupName="stack1"
+												Type="Bar"
+											/>
+											<Series
+												BarBorderColorTransparency="15"
+												BarBorderThickness="0"
+												BarStacking="Stacked"
+												BarThickness="18"
+												ChartXDataColumn="x_col"
+												ChartYDataColumn="bar_height"
+												Color="@Data.color_value8~,"
+												ID="s2"
+												LinkedToYAxisID="y"
+												StackGroupName="stack1"
+												Type="Bar"
+											/>
+											<Series
+												BarBorderColorTransparency="15"
+												BarBorderThickness="0"
+												BarStacking="Stacked"
+												BarThickness="18"
+												ChartXDataColumn="x_col"
+												ChartYDataColumn="bar_height"
+												Color="@Data.color_value9~,"
+												ID="s1"
+												LinkedToYAxisID="y"
+												StackGroupName="stack1"
+												Type="Bar"
+											/>
+											<ChartXAxis
+												HideAxis="True"
+											/>
+											<ChartYAxis
+												HideAxis="True"
+												ID="y"
+												OppositeSide="True"
+												ScaleLowerBound="0"
+												ScaleUpperBound="100"
+												>
+												<ChartTicksAndGrid
+													EndOnTick="True"
+													TickInterval="15"
+												/>
+												<MarkerBand
+													Caption="0"
+													Color="transparent"
+													MarkerBandFromValue="0"
+													MarkerBandToValue="0"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="2"
+													/>
+												</MarkerBand>
+												<MarkerBand
+													Caption="@Chart.range_value9~"
+													Color="transparent"
+													MarkerBandFromValue="0"
+													MarkerBandToValue="@Chart.bar_height1~"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="5"
+													/>
+												</MarkerBand>
+												<MarkerBand
+													Caption="@Chart.range_value8~"
+													Color="transparent"
+													MarkerBandFromValue="@Chart.bar_height1~"
+													MarkerBandToValue="@Chart.bar_height2~"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="5"
+													/>
+												</MarkerBand>
+												<MarkerBand
+													Caption="@Chart.range_value7~"
+													Color="transparent"
+													MarkerBandFromValue="@Chart.bar_height2~"
+													MarkerBandToValue="@Chart.bar_height3~"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="5"
+													/>
+												</MarkerBand>
+												<MarkerBand
+													Caption="@Chart.range_value6~"
+													Color="transparent"
+													MarkerBandFromValue="@Chart.bar_height3~"
+													MarkerBandToValue="@Chart.bar_height4~"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="5"
+													/>
+												</MarkerBand>
+												<MarkerBand
+													Caption="@Chart.range_value5~"
+													Color="transparent"
+													MarkerBandFromValue="@Chart.bar_height4~"
+													MarkerBandToValue="@Chart.bar_height5~"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="5"
+													/>
+												</MarkerBand>
+												<MarkerBand
+													Caption="@Chart.range_value4~"
+													Color="transparent"
+													MarkerBandFromValue="@Chart.bar_height5~"
+													MarkerBandToValue="@Chart.bar_height6~"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="5"
+													/>
+												</MarkerBand>
+												<MarkerBand
+													Caption="@Chart.range_value3~"
+													Color="transparent"
+													MarkerBandFromValue="@Chart.bar_height6~"
+													MarkerBandToValue="@Chart.bar_height7~"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="5"
+													/>
+												</MarkerBand>
+												<MarkerBand
+													Caption="@Chart.range_value2~"
+													Color="transparent"
+													MarkerBandFromValue="@Chart.bar_height7~"
+													MarkerBandToValue="@Chart.bar_height8~"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="5"
+													/>
+												</MarkerBand>
+												<MarkerBand
+													Caption="@Chart.range_value1~"
+													Color="transparent"
+													MarkerBandFromValue="@Chart.bar_height8~"
+													MarkerBandToValue="@Chart.bar_height9~"
+													>
+													<MarkerLabelStyle
+														AlignmentHorizontal="Right"
+														AlignmentVertical="Top"
+														FontSize="8"
+														OffsetX="1"
+														OffsetY="5"
+													/>
+												</MarkerBand>
+											</ChartYAxis>
+										</ChartCanvas>
+									</Division>
+								</Column>
+							</Row>
+						</Rows>
+					</Column>
+				</Row>
+			</Rows>
+		</Division>
+	</Body>
+	<ideTestParams/>
+</Report>

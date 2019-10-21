@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	Class="@Session.Theme~"
+	ID="MasterReport"
+	>
+	<LocalData>
+		<DataLayer
+			ConnectionID="MySQLServer"
+			ID="dlMenus"
+			Source="Select Menu.MenuLabel as Caption,
+  Menu.Reportname as Report ,
+  Menu.icon as icon,
+  Menu.HasSubMenu as HasSubMenu,
+  Menu.MenuID
+From Menu
+where IsActive = 1
+Order by [Order]"
+			Type="SQL"
+			>
+			<DataLayerLink
+				ID="linkedMenus"
+			/>
+			<CalculatedColumn
+				Formula="if(&apos;@Request.rdReport~&apos; != &apos;&apos;) {
+	&apos;Open&apos;;
+}
+else {
+	&apos;Closed&apos;;
+}"
+				ID="SidebarClass"
+			/>
+		</DataLayer>
+	</LocalData>
+	<IncludeSharedElement
+		DefinitionFile="Shared.Shared-General.Shared-General"
+		SharedElementID="CSSFILES"
+	/>
+	<Body>
+		<Division
+			Class="master-content"
+			HtmlDiv="True"
+			ID="masterContent"
+			>
+			<Division
+				Class="nav-sidebar navbar-dark sm_tp_mr_sidebar Closed @Local.SidebarClass~ MarginSideBar"
+				HtmlDiv="True"
+				ID="Sidebar"
+				ShowModes="rdBrowser"
+				>
+				<Division
+					HtmlDiv="True"
+					ID="SidebarMenu"
+					ShowModes="None"
+					>
+					<Division
+						Class="nav-sidebar-wrapper"
+						HtmlDiv="True"
+						ID="MenuWrapper"
+						>
+						<RepeatElements
+							ID="reMainMenu"
+							>
+							<DataLayer
+								ID="dlLinkedMenues"
+								LinkedDataLayerID="linkedMenus"
+								Type="Linked"
+								>
+								<CalculatedColumn
+									Formula="if((&apos;@Request.rdReport~&apos; == &apos;&apos; &amp;&amp; (&apos;@Data.Report~&apos; == &apos;Default&apos;)) 
+	|| (&apos;@Data.Report~&apos; != &apos;&apos; &amp;&amp; &apos;@Request.rdReport~&apos; == &apos;@Data.Report~&apos;)) {
+	&apos;active&apos;;
+}
+else {
+	&apos;&apos;;
+}"
+									ID="ActiveClass"
+								/>
+								<CalculatedColumn
+									Formula="if((&apos;@Request.rdReport~&apos; == &apos;&apos; &amp;&amp; (&apos;@Data.Report~&apos; == &apos;Default&apos;)) 
+	|| (&apos;@Data.Report~&apos; != &apos;&apos; &amp;&amp; &apos;@Request.rdReport~&apos; == &apos;@Data.Report~&apos;)) {
+	&apos;open&apos;;
+}
+else {
+	&apos;&apos;;
+}"
+									ID="OpenClass"
+								/>
+							</DataLayer>
+							<Division
+								Class="custom-link dropdown @Repeat.OpenClass~ @Repeat.ActiveClass~"
+								Condition="&apos;@Repeat.HasSubMenu~&apos; == &apos;1&apos;"
+								HtmlDiv="True"
+								ID="DropDown"
+								>
+								<Division
+									Class="report-caption"
+									>
+									<Remark>
+										<Spaces
+											Size="5"
+										/>
+									</Remark>
+									<Label
+										Caption="@Repeat.Caption~"
+										Class="text-capitalize"
+									/>
+									<Label
+										Class="fa fa-angle-right expand-sub fa-fw"
+										HtmlTag="I"
+									/>
+									<Action
+										ID="actLoadReport"
+										Javascript="if(!$(this).parent(&apos;.dropdown&apos;).hasClass(&apos;open&apos;)){
+$(this).parent(&apos;.dropdown&apos;).toggleClass(&apos;open&apos;).find(&apos;.expand-sub&apos;).toggleClass(&apos;fa-angle-right fa-angle-down&apos;);
+
+/*if (&apos;@Request.rdReport~&apos; != &apos;@Repeat.Report~&apos;) {
+	SubmitFormCrawlerFriendly(&apos;rdPage.aspx?rdReport=@Repeat.Report~&apos;,&apos;&apos;,&apos;false&apos;,&apos;&apos;);
+	}
+	
+*/
+}
+else {
+$(this).parent(&apos;.dropdown&apos;).toggleClass(&apos;open&apos;).find(&apos;.expand-sub&apos;).toggleClass(&apos;fa-angle-right fa-angle-down&apos;);
+}
+"
+										Type="Javascript"
+									/>
+								</Division>
+								<DataList
+									ID="dlstSub@Repeat.Report~"
+									Ordered="False"
+									>
+									<DataLayer
+										ConnectionID="MySQLServer"
+										ID="dl@Repeat.Report~"
+										Source="Select S.SubMenuLabel as Caption,
+  S.icon,
+  M.MenuLabel as Parent,
+  S.ReportName as Report,
+  S.MenuID as ParentMenuID,
+  CASE WHEN s.ReportName LIKE &apos;%.html&apos; THEN 1
+  ELSE 0 END AS isHTML
+From SubMenu S
+	inner join Menu M on S.MenuID = M.MenuID
+where S.IsActive = 1
+Order by S.[Order]	"
+										Type="SQL"
+										>
+										<CompareFilter
+											CompareType="="
+											CompareValue="@Repeat.MenuID~"
+											DataColumn="ParentMenuID"
+											ID="compReportParent"
+										/>
+										<CalculatedColumn
+											Formula="if((&apos;@Request.rdReport~&apos; == &apos;&apos; &amp;&amp; &apos;@Data.Report~&apos; == &apos;Default&apos;) || (&apos;@Data.Report~&apos; != &apos;&apos; &amp;&amp; &apos;@Request.rdReport~&apos; == &apos;@Data.Report~&apos;)) {
+	&apos;active&apos;;
+}
+else {
+	&apos;&apos;;
+}"
+											ID="ActiveClass"
+										/>
+									</DataLayer>
+									<ListItem
+										Class="report-caption @Data.ActiveClass~"
+										>
+										<Division
+											Condition="&apos;@Data.Report~&apos; != &apos;&apos; and @Data.isHTML~ == 0"
+											ID="Report"
+											>
+											<Label
+												Class="fa fa-circle small"
+												HtmlTag="I"
+												ID="icon"
+											/>
+											<Spaces
+												Size="2"
+											/>
+											<IncludeHtml
+												Html="@Data.Caption~"
+											/>
+											<Action
+												CrawlerFriendly="True"
+												Type="Report"
+												>
+												<Target
+													Report="@Data.Report~"
+													Type="Report"
+												/>
+											</Action>
+										</Division>
+										<Division
+											Condition="&apos;@Data.Report~&apos; != &apos;&apos; and  @Data.isHTML~ == 1"
+											ID="htmlPage"
+											>
+											<Label
+												Class="fa fa-circle small"
+												HtmlTag="I"
+												ID="icon"
+											/>
+											<Spaces
+												Size="2"
+											/>
+											<IncludeHtml
+												Html="@Data.Caption~"
+											/>
+											<Action
+												Type="Link"
+												>
+												<Target
+													FrameID="NewWindow"
+													Link="http://localhost/Embedded_analytics_html/@Data.Report~"
+													Type="Link"
+												/>
+											</Action>
+										</Division>
+									</ListItem>
+								</DataList>
+							</Division>
+							<Division
+								Class=" @Repeat.ActiveClass~"
+								Condition="&apos;@Repeat.HasSubMenu~&apos; == &apos;0&apos;"
+								HtmlDiv="True"
+								ID="LinkTo"
+								>
+								<Division
+									Class="report-caption"
+									>
+									<Remark>
+										<Label
+											Class="@Repeat.icon~ fa-fw"
+											HtmlTag="I"
+											ID="icon"
+										/>
+									</Remark>
+									<Remark>
+										<Spaces
+											Size="2"
+										/>
+									</Remark>
+									<Label
+										Caption="@Repeat.Caption~"
+									/>
+									<Action
+										CrawlerFriendly="True"
+										Type="Report"
+										>
+										<Target
+											Report="@Repeat.Report~"
+											Type="Report"
+										/>
+										<LinkParams
+											name="@Repeat.Caption~"
+										/>
+									</Action>
+								</Division>
+							</Division>
+						</RepeatElements>
+					</Division>
+				</Division>
+			</Division>
+			<IncludeScript
+				ID="setActiveMenuItem"
+				IncludedScript="$(document).ready(function() {
+	$(&apos;#SidebarMenu div#MenuWrapper ul&gt;li.active&apos;).closest(&apos;.dropdown&apos;).addClass(&apos;open&apos;).find(&quot;i.fa-angle-right&quot;).toggleClass(&apos;fa-angle-right fa-angle-down&apos;);
+	$(&quot;#SidebarMenu&quot;).show();
+	$(&apos;.sidebar-toggle&apos;).click(function() {
+		setTimeout(function() {
+			//Get all charts on the page
+			var chartsArray = Highcharts.charts.filter(function(n){ return n != undefined });
+			
+			//Loop through the array
+			$.each(chartsArray,function(i){
+				//Update the current chart
+				chartsArray[i].reflow();
+			});
+		}, 300);
+	});
+});"
+			/>
+			<Division
+				Class="navbar navbar-dark  fixed-top navbar-expand-md p-0"
+				HtmlDiv="True"
+				ID="navigation"
+				ShowModes="rdBrowser"
+				>
+				<Division
+					Class="sidebar-toggle custom-toggler"
+					ID="sidebar-toggle"
+					>
+					<EventHandler
+						DhtmlEvent="onclick"
+						>
+						<Action
+							Javascript="$(&quot;#Sidebar&quot;).toggleClass(&quot;Open Closed&quot;);"
+							Type="Javascript"
+						/>
+					</EventHandler>
+					<Note
+						Note="sidebar-toggle"
+					/>
+					<HtmlTag
+						Class="navbar-toggler-icon"
+						HtmlTagName="span"
+						>
+						<Remark>
+							<HtmlTag
+								Class="fa fa-navicon"
+								HtmlTagName="i"
+							/>
+						</Remark>
+					</HtmlTag>
+				</Division>
+				<Division
+					Class="navbar-text p-3 hidden-sm-down w-100"
+					HtmlDiv="True"
+					>
+					<Remark>
+						<Label
+							Caption="WebsiteName"
+							Class="h3"
+						/>
+					</Remark>
+					<Remark>
+						<Label
+							Caption=" | @Request.name~ "
+							Class="ex1"
+						/>
+					</Remark>
+					<Image
+						Caption="dbseerLogo.png"
+						Class="mr-5"
+						Height="44px"
+						ID="dbseerLogo"
+					/>
+					<Image
+						Caption="logiConfLogo.png"
+						Class="float-right"
+						Height="44px"
+						ID="logiConfLogo"
+					/>
+					<Label
+						Caption="&lt;i class=&quot;fa fa-sign-out&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Logout"
+						Class="exit float-right"
+						Format="HTML"
+						HtmlTag="Span"
+						ID="lbLogOut"
+						>
+						<Action
+							Type="Exit"
+							>
+							<Target
+								ID="logout"
+								Link="rdLogon.aspx"
+								Type="Link"
+							/>
+						</Action>
+					</Label>
+				</Division>
+			</Division>
+			<Division
+				Class="content-wrapper  MainContentMargin"
+				HtmlDiv="True"
+				ID="mainContent"
+				>
+				<MasterReportContent/>
+			</Division>
+		</Division>
+		<IncludeScriptFile
+			ID="bootstrap"
+			IncludedScriptFile="Framework.bootstrap.bootstrap.js"
+			>
+			<Note
+				Note="Includes Bootstrap.min.js, Popper.js or tether.js"
+			/>
+		</IncludeScriptFile>
+	</Body>
+	<IncludeSharedElement
+		DefinitionFile="Shared.Shared-General.Shared-General"
+		SharedElementID="JAVASC"
+	/>
+	<ideTestParams/>
+</Report>

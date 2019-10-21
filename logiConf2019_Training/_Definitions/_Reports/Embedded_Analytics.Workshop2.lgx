@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Embedded_Analytics.Workshop2"
+	>
+	<LocalData>
+		<DataLayer
+			ConnectionID="SQLCon"
+			Source="SELECT * FROM (
+select datepart(year, OrderDate) as OrderYear, datepart(month, OrderDate) as OrderMonth, 
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end as MonthName,
+sum(SalesAmount) as Sales
+	from  [dbo].[FactResellerSales]
+group by datepart(year, OrderDate), datepart(month, OrderDate),
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end 
+union
+select &apos;2011&apos;, 2, &apos;Feb&apos;, null
+union
+select &apos;2011&apos;, 4, &apos;Apr&apos;, null
+) as q
+WHERE OrderYear = &apos;@Request.year~&apos; or &apos;&apos; = &apos;@Request.year~&apos; 
+order by OrderYear, OrderMonth
+"
+			Type="SQL"
+			>
+			<DataLayerLink
+				ID="dlLink"
+			/>
+		</DataLayer>
+	</LocalData>
+	<Body>
+		<ChartCanvas
+			ChartCaption="Sales For months by years "
+			ChartSubCaption="@Request.year~"
+			>
+			<Series
+				ChartXDataColumn="MonthName"
+				ChartXDataColumnType="Text"
+				ChartYDataColumn="Sales"
+				Color="#f8540b"
+				ConnectNulls="True"
+				LegendLabel="2011"
+				LineThickness="4"
+				Type="Line"
+				>
+				<DataLayer
+					LinkedDataLayerID="dlLink"
+					Type="Linked"
+					>
+					<CompareFilter
+						CompareType="="
+						CompareValue="2011"
+						DataColumn="OrderYear"
+						ID="cmp2011"
+					/>
+					<Remark>
+						<SortFilter
+							SortColumn="OrderMonth"
+						/>
+					</Remark>
+				</DataLayer>
+				<MarkerPoints
+					MarkerPointSymbol="Circle"
+				/>
+				<Quicktip
+					Title="2011"
+					>
+					<QuicktipRow
+						Caption="Sales:"
+						Format="###,###,##0.00 mp"
+						Value="@Chart.Sales~"
+					/>
+				</Quicktip>
+			</Series>
+			<Series
+				ChartXDataColumn="MonthName"
+				ChartXDataColumnType="Text"
+				ChartYDataColumn="Sales"
+				Color="#6d6782"
+				LegendLabel="2012"
+				LineThickness="4"
+				Type="Line"
+				>
+				<DataLayer
+					LinkedDataLayerID="dlLink"
+					Type="Linked"
+					>
+					<CompareFilter
+						CompareType="="
+						CompareValue="2012"
+						DataColumn="OrderYear"
+						ID="cmp2012"
+					/>
+					<Remark>
+						<SortFilter
+							SortColumn="OrderMonth"
+						/>
+					</Remark>
+				</DataLayer>
+				<MarkerPoints
+					MarkerPointSymbol="Circle"
+				/>
+				<Quicktip
+					Title="2012"
+					>
+					<QuicktipRow
+						Caption="Sales:"
+						Format="###,###,##0.00 mp"
+						Value="@Chart.Sales~"
+					/>
+				</Quicktip>
+			</Series>
+			<Series
+				ChartXDataColumn="MonthName"
+				ChartXDataColumnType="Text"
+				ChartYDataColumn="Sales"
+				Color="#c6bcb2"
+				LegendLabel="2013"
+				LineThickness="4"
+				Type="Line"
+				>
+				<DataLayer
+					LinkedDataLayerID="dlLink"
+					Type="Linked"
+					>
+					<CompareFilter
+						CompareType="="
+						CompareValue="2013"
+						DataColumn="OrderYear"
+						ID="cmp2013"
+					/>
+					<Remark>
+						<SortFilter
+							SortColumn="OrderMonth"
+						/>
+					</Remark>
+				</DataLayer>
+				<MarkerPoints
+					MarkerPointSymbol="Circle"
+				/>
+				<Quicktip
+					Title="2013"
+					>
+					<QuicktipRow
+						Caption="Sales:"
+						Format="###,###,##0.00 mp"
+						Value="@Chart.Sales~"
+					/>
+				</Quicktip>
+			</Series>
+			<ChartXAxis
+				AxisLineColor="#48525e"
+				>
+				<ChartTicksAndGrid
+					GridLineThickness="0"
+					TickInterval="1"
+					TickLineColor="#48525e"
+				/>
+				<AxisLabelStyle
+					FontColor="#48525e"
+					FontFamily="@Constant.fontFamily~"
+				/>
+			</ChartXAxis>
+			<ChartYAxis
+				AxisCaption="Sales (In Million)"
+				>
+				<ChartTicksAndGrid
+					GridLineColor="#f5efef"
+				/>
+				<AxisLabelStyle
+					FontColor="#48525e"
+					FontFamily="@Constant.fontFamily~"
+				/>
+			</ChartYAxis>
+		</ChartCanvas>
+	</Body>
+	<ideTestParams
+		year=""
+	/>
+</Report>

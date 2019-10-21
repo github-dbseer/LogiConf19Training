@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Crosstab.Workshop2.Multi-Value"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<Note>
+		<Note
+			Note="Crosstab-Workshop-2 - Multi-Value"
+		/>
+	</Note>
+	<DefaultRequestParams
+		name="Workshop2-Multi-Value"
+	/>
+	<Body>
+		<CrosstabTable
+			Class="table table-striped table-bordered table-responsive mw-100 cross-tab-table-custom"
+			ColumnHeaderClass="text-dark text-center custom-cross-tab-header"
+			ID="ctQtr"
+			TableBorder="2"
+			>
+			<DataLayer
+				ConnectionID="MySQLServer"
+				ID="dtlSales"
+				Source="/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT 
+      
+      
+       Year(Orderdate) [Year]
+	  ,P.ProductSubcategoryID
+	  ,ps.[Name] SubCategoryName
+	  ,pc.[Name] CategoryName
+      ,Sum([LineTotal]) LineTotal
+	  ,Sum([OrderQty]) OrderQty
+      
+  FROM [AdventureWorks2016CTP3].[Sales].[SalesOrderDetail] s
+	inner join [Production].[Product] p on s.ProductID=p.ProductID
+	inner join [Production].[ProductSubcategory] ps on ps.ProductSubcategoryID=p.ProductSubcategoryID
+	inner join [Production].[ProductCategory] pc on pc.ProductCategoryID=ps.ProductCategoryID
+	inner join [Sales].[SalesOrderHeader] soh on soh.SalesOrderID=soh.SalesOrderID
+Where Year(Orderdate) in (2011,2012,2013,2014)
+Group by 
+      Year(Orderdate) 
+	  ,P.ProductSubcategoryID
+	  ,ps.[Name] 
+	  ,pc.[Name] "
+				Type="SQL"
+				>
+				<CrosstabFilter
+					CrosstabColumn="Year"
+					CrosstabLabelColumn="CategoryName"
+					CrosstabValueColumn="OrderQty"
+					CrosstabValueFunction="Sum"
+					MaxCrosstabRows="@Constant.NumberRows~"
+					>
+					<ExtraCrosstabValueColumn
+						CrosstabValueColumn="LineTotal"
+						CrosstabValueFunction="Sum"
+						ID="SumLineTotal"
+					/>
+				</CrosstabFilter>
+			</DataLayer>
+			<HeaderRow
+				Class="ThemeHeader grp-header-row custom-cross-tab-header"
+				HeaderPosition="Top"
+				ID="hdCrosstabYear"
+				>
+				<Column
+					ID="colcell"
+					>
+					<Spaces/>
+				</Column>
+				<CrosstabTableHeaderColumn
+					Class="text-dark text-center custom-cross-tab-header"
+					ColSpan="2"
+					ID="ctheader"
+					>
+					<Label
+						Caption="@Data.rdCrosstabColumn~"
+						ID="lblYear"
+					/>
+				</CrosstabTableHeaderColumn>
+			</HeaderRow>
+			<CrosstabTableLabelColumn
+				Class="custom-cross-tab-header"
+				Header="Category"
+				ID="ColCategoryName"
+				>
+				<Label
+					Caption="@Data.CategoryName~"
+				/>
+			</CrosstabTableLabelColumn>
+			<CrosstabTableValueColumns
+				Class="custom-cross-tab-header"
+				Header="Qty"
+				ID="ColTableValues"
+				>
+				<Label
+					Caption="@Data.rdCrosstabValue~"
+					Format="###,###,##0.00 mp"
+					ID="lblQtr"
+				/>
+			</CrosstabTableValueColumns>
+			<CrosstabTableValueColumns
+				Class="custom-cross-tab-header"
+				Header="Amount"
+				ID="colTotal"
+				>
+				<Label
+					Caption="@Data.rdCrosstabValue-SumLineTotal~"
+					Format="###,###,##0.00 mp"
+					ID="lblTotal"
+				/>
+			</CrosstabTableValueColumns>
+		</CrosstabTable>
+	</Body>
+	<ideTestParams/>
+</Report>

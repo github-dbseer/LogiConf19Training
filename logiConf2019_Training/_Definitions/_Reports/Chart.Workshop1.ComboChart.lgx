@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Chart.Workshop1.ComboChart"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<LocalData
+		ID="LocalSalesData"
+		>
+		<DataLayer
+			ConnectionID="SQLCon"
+			ID="dlSales"
+			Source="select datepart(year, OrderDate) as OrderYear, datepart(quarter, OrderDate) as OrderQtr 
+, sum(SalesAmount) as SalesAmount ,
+ sum(TotalProductCost) as TotalProductCost,
+(( sum(SalesAmount) - sum(TotalProductCost))*100)/ sum(TotalProductCost) as ProfitPerc,
+(( sum(SalesAmount) - sum(TotalProductCost)))/ sum(TotalProductCost) as ProfitVal
+from [dbo].[FactResellerSales] S
+	inner join [dbo].[DimEmployee] E on S.EmployeeKey = E.EmployeeKey
+where datepart(year, OrderDate) &gt; 2010
+group by  datepart(year, OrderDate), datepart(quarter, OrderDate) 
+order by datepart(year, OrderDate), datepart(quarter, OrderDate) 
+
+
+--select * from [dbo].[FactResellerSales] S"
+			Type="SQL"
+			>
+			<DataLayerLink
+				ID="dlLink"
+			/>
+		</DataLayer>
+	</LocalData>
+	<Body>
+		<Division
+			ID="divChart"
+			>
+			<ChartCanvas
+				Class="dark-label"
+				>
+				<Series
+					BarStacking="SideBySide"
+					ChartXDataColumn="OrderYear"
+					ChartXDataColumnType="Text"
+					ChartYDataColumn="SalesAmount"
+					Color="@Constant.primary2~"
+					LegendLabel="Q1"
+					LinkedToYAxisID="SalesAmtY"
+					Type="Bar"
+					>
+					<DataLayer
+						LinkedDataLayerID="dlLink"
+						Type="Linked"
+						>
+						<CompareFilter
+							CompareType="="
+							CompareValue="1"
+							DataColumn="OrderQtr"
+							DataType="Number"
+							ID="Qtr1cmp"
+						/>
+					</DataLayer>
+					<IncludeSharedElement
+						DefinitionFile="Chart.Workshop1.ComboChart"
+						SharedElementID="quickTip"
+					/>
+				</Series>
+				<Series
+					BarStacking="SideBySide"
+					ChartXDataColumn="OrderYear"
+					ChartXDataColumnType="Text"
+					ChartYDataColumn="SalesAmount"
+					Color="@Constant.primary4~"
+					LegendLabel="Q2"
+					LinkedToYAxisID="SalesAmtY"
+					Type="Bar"
+					>
+					<DataLayer
+						LinkedDataLayerID="dlLink"
+						Type="Linked"
+						>
+						<CompareFilter
+							CompareType="="
+							CompareValue="2"
+							DataColumn="OrderQtr"
+							DataType="Number"
+							ID="Qtr2cmp"
+						/>
+					</DataLayer>
+					<IncludeSharedElement
+						DefinitionFile="Chart.Workshop1.ComboChart"
+						SharedElementID="quickTip"
+					/>
+				</Series>
+				<Series
+					BarStacking="SideBySide"
+					ChartXDataColumn="OrderYear"
+					ChartXDataColumnType="Text"
+					ChartYDataColumn="SalesAmount"
+					Color="@Constant.primary7~"
+					LegendLabel="Q3"
+					LinkedToYAxisID="SalesAmtY"
+					StackGroupName="a"
+					Type="Bar"
+					>
+					<DataLayer
+						LinkedDataLayerID="dlLink"
+						Type="Linked"
+						>
+						<CompareFilter
+							CompareType="="
+							CompareValue="3"
+							DataColumn="OrderQtr"
+							DataType="Number"
+							ID="Qtr3cmp"
+						/>
+					</DataLayer>
+					<IncludeSharedElement
+						DefinitionFile="Chart.Workshop1.ComboChart"
+						SharedElementID="quickTip"
+					/>
+				</Series>
+				<Series
+					BarStacking="SideBySide"
+					ChartXDataColumn="OrderYear"
+					ChartXDataColumnType="Text"
+					ChartYDataColumn="SalesAmount"
+					Color="#c6bcb2"
+					LegendLabel="Q4"
+					LinkedToYAxisID="SalesAmtY"
+					StackGroupName="a"
+					Type="Bar"
+					>
+					<DataLayer
+						LinkedDataLayerID="dlLink"
+						Type="Linked"
+						>
+						<CompareFilter
+							CompareType="="
+							CompareValue="4"
+							DataColumn="OrderQtr"
+							DataType="Number"
+							ID="Qtr4cmp"
+						/>
+					</DataLayer>
+					<IncludeSharedElement
+						DefinitionFile="Chart.Workshop1.ComboChart"
+						SharedElementID="quickTip"
+					/>
+				</Series>
+				<Series
+					ChartXDataColumn="OrderYear"
+					ChartXDataColumnType="Text"
+					ChartYDataColumn="ProfitPerc"
+					Color="#f8540b"
+					HoverLineThickness="4"
+					LineThickness="3"
+					LinkedToYAxisID="ProfitPerc"
+					Type="Line"
+					>
+					<DataLayer
+						ConnectionID="SQLCon"
+						Source="select datepart(year, OrderDate) as OrderYear 
+, sum(SalesAmount) as SalesAmount ,
+ sum(TotalProductCost) as TotalProductCost,
+(( sum(SalesAmount) - sum(TotalProductCost))*100)/ sum(TotalProductCost) as ProfitPerc
+from [dbo].[FactResellerSales] S
+	inner join [dbo].[DimEmployee] E on S.EmployeeKey = E.EmployeeKey
+where datepart(year, OrderDate) &gt; 2010
+group by  datepart(year, OrderDate) 
+order by datepart(year, OrderDate)
+
+"
+						Type="SQL"
+					/>
+					<MarkerPoints
+						MarkerPointSymbol="Circle"
+					/>
+					<Quicktip
+						Title="Year: @Chart.OrderYear~"
+						>
+						<QuicktipRow
+							Caption="Profit Perc :"
+							Value="@Chart.ProfitPerc~"
+						/>
+						<QuicktipRow
+							Caption="Sales Amount :"
+							Format="Currency"
+							Value="@Chart.SalesAmount~"
+						/>
+						<QuicktipRow
+							Caption="Total Product Cost:"
+							Format="Currency"
+							Value="@Chart.TotalProductCost~"
+						/>
+					</Quicktip>
+				</Series>
+				<ChartYAxis
+					AxisCaption="Sales (In Milion)"
+					ID="SalesAmtY"
+					>
+					<ChartTicksAndGrid
+						GridLineColor="#f5efef"
+					/>
+					<AxisLabelStyle
+						FontColor="#48525e"
+						FontFamily="@Constant.fontFamily~"
+					/>
+				</ChartYAxis>
+				<ChartYAxis
+					AxisCaption="Profit %"
+					ID="ProfitPerc"
+					OppositeSide="True"
+					OppositeSideAlignment="True"
+					>
+					<ChartTicksAndGrid
+						GridLineColor="#f5efef"
+					/>
+					<AxisLabelStyle
+						FontColor="#48525e"
+						FontFamily="@Constant.fontFamily~"
+					/>
+				</ChartYAxis>
+				<ChartXAxis
+					AxisCaption="Year"
+					AxisLineColor="#48525e"
+					AxisType="Category"
+					ID="XAxisID"
+					>
+					<AxisLabelStyle
+						FontColor="#48525e"
+						FontFamily="Arial,Helvetica,sans-serif"
+						Format="###0"
+					/>
+					<ChartTicksAndGrid
+						GridLineThickness="0"
+						TickLineColor="#48525e"
+					/>
+					<AxisCaptionStyle
+						FontColor="#48525e"
+						FontFamily="@Constant.fontFamily~"
+					/>
+				</ChartXAxis>
+				<ChartCanvasLegend>
+					<LegendLabelStyle
+						FontColor="#48525e"
+						FontFamily="@Constant.fontFamily~"
+					/>
+				</ChartCanvasLegend>
+			</ChartCanvas>
+		</Division>
+	</Body>
+	<SharedElement
+		ID="quickTip"
+		>
+		<Quicktip
+			Title="Year : @Chart.OrderYear~"
+			>
+			<Remark>
+				<QuicktipRow
+					Caption="Order Qtr :"
+					Value="@Chart.OrderQtr~"
+				/>
+			</Remark>
+			<QuicktipRow
+				Caption="Profit %:"
+				Format="##.##%"
+				Value="@Chart.ProfitVal~"
+			/>
+			<QuicktipRow
+				Caption="Sales :"
+				Format="###,###,##0.00 mp"
+				Value="@Chart.SalesAmount~"
+			/>
+			<QuicktipRow
+				Caption="Cost:"
+				Format="###,###,##0.00 mp"
+				Value="@Chart.TotalProductCost~"
+			/>
+		</Quicktip>
+	</SharedElement>
+	<ideTestParams/>
+</Report>

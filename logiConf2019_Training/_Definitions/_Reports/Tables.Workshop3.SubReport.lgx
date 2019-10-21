@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	Class="overflow-hidden"
+	ID="Tables.Workshop3.SubReport"
+	>
+	<IncludeSharedElement
+		DefinitionFile="Shared.Shared-General.Shared-General"
+		SharedElementID="CSSFILES"
+	/>
+	<Body>
+		<Division
+			Class="sub-report-table"
+			HtmlDiv="True"
+			ID="sub-report-table"
+			>
+			<DataTable
+				AccessibleHeaders="True"
+				AccessibleSummary="DataTable"
+				AjaxPaging="True"
+				Class="table table-striped full-width table-bordered"
+				ColumnHeaderClass="custom-header text-center tbl-header"
+				ID="dtSubReport"
+				KeepScrollPosition="True"
+				RememberSort="True"
+				ResizableColumns="True"
+				SortArrows="True"
+				TableBorder="0"
+				Width="100"
+				WidthScale="%"
+				>
+				<DataLayer
+					ConnectionID="SQLCon"
+					ID="SQLsubReport"
+					Source="
+select PC.EnglishProductCategoryName as ProductCategoryName, PSC.EnglishProductSubcategoryName as ProductSubcategoryName,
+sum(SalesAmount) as Sales, sum(TotalProductCost) as Cost, sum(Freight) as Freight, sum(TaxAmt) as Taxes
+from [dbo].[FactInternetSales] FIS
+	inner join DimSalesTerritory ST on FIS.SalesTerritoryKey = ST.SalesTerritoryKey
+	inner join DimProduct P on FIS.ProductKey = P.ProductKey
+	inner join DimProductSubcategory PSC on P.ProductSubcategoryKey = PSC.ProductSubcategoryKey
+	inner join DimProductCategory PC on PSC.ProductCategoryKey = PC.ProductCategoryKey
+where ST.SalesTerritoryRegion = &apos;@Request.Region~&apos;	
+group by PC.EnglishProductCategoryName, PSC.EnglishProductSubcategoryName
+order by PC.EnglishProductCategoryName, PSC.EnglishProductSubcategoryName"
+					Type="SQL"
+				/>
+				<InteractivePaging
+					CaptionType="Image"
+					HideShowPrevNextCaptions="False"
+					HideWhenOnePage="True"
+					IDnotSupportedHere="pagingTableNumbered"
+					Location="Top"
+					PageRowCount="20"
+					ShowPageNumber="Numbered"
+				/>
+				<DataTableColumn
+					Header="ProductCategoryName"
+					ID="colProductCategoryName"
+					>
+					<Label
+						Caption="@Data.ProductCategoryName~"
+						ID="lblProductCategoryName"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="ProductCategoryName"
+						DataType="Text"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Header="ProductSubcategoryName"
+					ID="colProductSubcategoryName"
+					>
+					<Label
+						Caption="@Data.ProductSubcategoryName~"
+						ID="lblProductSubcategoryName"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="ProductSubcategoryName"
+						DataType="Text"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Class="text-right"
+					Header="Sales"
+					ID="colSales"
+					>
+					<Label
+						Caption="@Data.Sales~"
+						Format="Currency"
+						ID="lblSales"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="Sales"
+						DataType="Number"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Class="text-right"
+					Header="Cost"
+					ID="colCost"
+					>
+					<Label
+						Caption="@Data.Cost~"
+						Format="Currency"
+						ID="lblCost"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="Cost"
+						DataType="Number"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Class="text-right"
+					Header="Freight"
+					ID="colFreight"
+					>
+					<Label
+						Caption="@Data.Freight~"
+						Format="Currency"
+						ID="lblFreight"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="Freight"
+						DataType="Number"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Class="text-right"
+					Header="Taxes"
+					ID="colTaxes"
+					>
+					<Label
+						Caption="@Data.Taxes~"
+						Format="Currency"
+						ID="lblTaxes"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="Taxes"
+						DataType="Number"
+					/>
+				</DataTableColumn>
+			</DataTable>
+		</Division>
+	</Body>
+	<ideTestParams
+		Region=""
+	/>
+</Report>

@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Embedded_Analytics.Workshop3"
+	>
+	<DefaultRequestParams
+		chart="spline"
+	/>
+	<SharedElement
+		ID="sourceAndYX"
+		>
+		<ChartXAxis
+			AxisCaption="Years"
+			AxisLineColorTransparency="7"
+			>
+			<ChartTicksAndGrid
+				GridLineColorTransparency="0"
+				GridLineThickness="0"
+				TickInterval="1"
+			/>
+			<ChartMinorTicksAndGrid
+				TickLineColorTransparency="0"
+			/>
+		</ChartXAxis>
+		<ChartYAxis
+			AxisCaption="Sales"
+		/>
+		<DataLayer
+			ConnectionID="MySQLServer"
+			ID="productCatSales"
+			Source="	Select UnitPrice*OrderQty as price, DATEPART(YEAR, SellStartDate) as year,  Production.ProductSubcategory.Name
+From Production.Product
+  Inner Join Production.ProductSubcategory
+    On Production.ProductSubcategory.ProductSubcategoryID =
+    Production.Product.ProductSubcategoryID
+  Inner Join Production.ProductCategory
+    On Production.ProductCategory.ProductCategoryID =
+    Production.ProductSubcategory.ProductCategoryID
+  Inner Join Purchasing.PurchaseOrderDetail On Production.Product.ProductID =
+    Purchasing.PurchaseOrderDetail.ProductID
+	-- just to make the chart look good
+	WHERE UnitPrice*OrderQty &lt; 10000
+	AND  Production.ProductSubcategory.Name NOT IN (&apos;Chains&apos;, &apos;Tires and Tubes&apos;, &apos;Pedals&apos;, &apos;Saddles&apos;)
+"
+			Type="SQL"
+			>
+			<CrosstabFilter
+				CrosstabColumn="Name"
+				CrosstabLabelColumn="year"
+				CrosstabValueColumn="price"
+				CrosstabValueFunction="Sum"
+			/>
+		</DataLayer>
+	</SharedElement>
+	<SharedElement
+		ID="quickTip"
+		>
+		<Quicktip
+			Title="Sales For @Chart.rdCrosstabColumn~ in @Chart.year~"
+			>
+			<QuicktipRow
+				Format="##mp"
+				Value="value: @Chart.rdCrosstabValue~"
+			/>
+		</Quicktip>
+	</SharedElement>
+	<Body>
+		<Division
+			Condition="&apos;@Request.chart~&apos; == &apos;bar&apos;"
+			>
+			<ChartCanvas
+				ChartCaption="Sales for product categories by years"
+				ChartHeight="550"
+				ID="ChartCanvas1"
+				>
+				<Series
+					BarBorderRadius="6"
+					ChartXDataColumn="Year"
+					ChartYDataColumn="rdCrosstabValue"
+					Color="@Constant.colorTemplate~, #c71902, #1E3859, #F280B6, #A66D88, #03A66A"
+					Type="Bar"
+					>
+					<IncludeSharedElement
+						DefinitionFile="Embedded_Analytics.Workshop3"
+						SharedElementID="quickTip"
+					/>
+				</Series>
+				<IncludeSharedElement
+					DefinitionFile="Embedded_Analytics.Workshop3"
+					SharedElementID="sourceAndYX"
+				/>
+			</ChartCanvas>
+		</Division>
+		<Division
+			Condition="&apos;@Request.chart~&apos; == &apos;bubble&apos;"
+			>
+			<ChartCanvas
+				ChartCaption="Sales for product categories by years"
+				ChartHeight="550"
+				ID="ChartCanvas1"
+				>
+				<Series
+					ChartSizeDataColumn="rdCrosstabValue"
+					ChartXDataColumn="year"
+					ChartYDataColumn="rdCrosstabValue"
+					Color="@Constant.colorTemplate~, #c71902, #1E3859, #F280B6, #A66D88, #03A66A"
+					Type="Bubble"
+					>
+					<IncludeSharedElement
+						DefinitionFile="Embedded_Analytics.Workshop3"
+						SharedElementID="quickTip"
+					/>
+				</Series>
+				<IncludeSharedElement
+					DefinitionFile="Embedded_Analytics.Workshop3"
+					SharedElementID="sourceAndYX"
+				/>
+			</ChartCanvas>
+		</Division>
+		<Division
+			Condition="&apos;@Request.chart~&apos; == &apos;spline&apos;"
+			>
+			<ChartCanvas
+				ChartCaption="Sales for product categories by years"
+				ChartHeight="550"
+				ID="ChartCanvas1"
+				>
+				<DataLayer
+					ConnectionID="MySQLServer"
+					ID="productCatSales"
+					Source="	Select UnitPrice*OrderQty as price, DATEPART(YEAR, SellStartDate) as year,  Production.ProductSubcategory.Name
+From Production.Product
+  Inner Join Production.ProductSubcategory
+    On Production.ProductSubcategory.ProductSubcategoryID =
+    Production.Product.ProductSubcategoryID
+  Inner Join Production.ProductCategory
+    On Production.ProductCategory.ProductCategoryID =
+    Production.ProductSubcategory.ProductCategoryID
+  Inner Join Purchasing.PurchaseOrderDetail On Production.Product.ProductID =
+    Purchasing.PurchaseOrderDetail.ProductID
+	-- just to make the chart look good
+	WHERE UnitPrice*OrderQty &lt; 10000
+	AND  Production.ProductSubcategory.Name NOT IN (&apos;Chains&apos;, &apos;Tires and Tubes&apos;, &apos;Pedals&apos;, &apos;Saddles&apos;, &apos;Gloves&apos;)
+"
+					Type="SQL"
+					>
+					<CrosstabFilter
+						CrosstabColumn="Name"
+						CrosstabLabelColumn="year"
+						CrosstabValueColumn="price"
+						CrosstabValueFunction="Sum"
+					/>
+				</DataLayer>
+				<ChartXAxis
+					AxisLineColorTransparency="0"
+					>
+					<ChartTicksAndGrid
+						TickInterval="1"
+					/>
+				</ChartXAxis>
+				<Series
+					ChartXDataColumn="Name"
+					ChartYDataColumn="rdCrosstabValue"
+					Color="@Constant.colorTemplate~, #c71902, #1E3859, #F280B6, #A66D88, #03A66A"
+					Type="AreaSpline"
+					>
+					<Quicktip
+						Title="Sales For @Chart.rdCrosstabColumn~ in @Chart.year~"
+						>
+						<QuicktipRow
+							Format="##mp"
+							Value="value: @Chart.rdCrosstabValue~"
+						/>
+					</Quicktip>
+				</Series>
+			</ChartCanvas>
+		</Division>
+		<Division
+			Condition="&apos;@Request.chart~&apos; == &apos;area&apos;"
+			>
+			<ChartCanvas
+				ChartCaption="Sales for product categories by years"
+				ChartHeight="550"
+				ID="ChartCanvas1"
+				>
+				<DataLayer
+					ConnectionID="MySQLServer"
+					ID="productCatSales"
+					Source="	Select UnitPrice*OrderQty as price, DATEPART(YEAR, SellStartDate) as year,  Production.ProductSubcategory.Name
+From Production.Product
+  Inner Join Production.ProductSubcategory
+    On Production.ProductSubcategory.ProductSubcategoryID =
+    Production.Product.ProductSubcategoryID
+  Inner Join Production.ProductCategory
+    On Production.ProductCategory.ProductCategoryID =
+    Production.ProductSubcategory.ProductCategoryID
+  Inner Join Purchasing.PurchaseOrderDetail On Production.Product.ProductID =
+    Purchasing.PurchaseOrderDetail.ProductID
+	-- just to make the chart look good
+	WHERE UnitPrice*OrderQty &lt; 10000
+	AND  Production.ProductSubcategory.Name NOT IN (&apos;Chains&apos;, &apos;Tires and Tubes&apos;, &apos;Pedals&apos;, &apos;Saddles&apos;, &apos;Gloves&apos;)
+"
+					Type="SQL"
+					>
+					<CrosstabFilter
+						CrosstabColumn="Name"
+						CrosstabLabelColumn="year"
+						CrosstabValueColumn="price"
+						CrosstabValueFunction="Sum"
+					/>
+				</DataLayer>
+				<ChartXAxis
+					AxisLineColorTransparency="0"
+					>
+					<ChartTicksAndGrid
+						TickInterval="1"
+					/>
+				</ChartXAxis>
+				<Series
+					ChartXDataColumn="Name"
+					ChartYDataColumn="rdCrosstabValue"
+					Color="@Constant.colorTemplate~, #c71902, #1E3859, #F280B6, #A66D88, #03A66A"
+					Type="Area"
+					>
+					<Quicktip
+						Title="Sales For @Chart.rdCrosstabColumn~ in @Chart.year~"
+						>
+						<QuicktipRow
+							Format="##mp"
+							Value="value: @Chart.rdCrosstabValue~"
+						/>
+					</Quicktip>
+				</Series>
+			</ChartCanvas>
+		</Division>
+	</Body>
+	<ideTestParams
+		chart=""
+	/>
+</Report>

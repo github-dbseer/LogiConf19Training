@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Training.Day4-1-Process"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<DefaultRequestParams
+		title="Day4 Process"
+	/>
+	<Body>
+		<Division
+			Class="row"
+			HtmlDiv="True"
+			>
+			<Division
+				Class="col-sm-12"
+				HtmlDiv="True"
+				ID="call-process1"
+				>
+				<Label
+					Caption="Process Call"
+					Class="btn btn-secondary"
+					ID="prc1"
+					>
+					<Action
+						ID="call-prc1"
+						Process="Day-4-1-Process"
+						TaskID="task1-Process"
+						Type="Process"
+					/>
+				</Label>
+			</Division>
+			<Division
+				Class="col-sm-12 mt-3"
+				HtmlDiv="True"
+				>
+				<Label
+					Caption="@Request.status~"
+					Class="text-muted"
+					HtmlTag="H6"
+				/>
+			</Division>
+		</Division>
+		<HR
+			Class="mt-2 mb-2"
+			Size="2"
+		/>
+		<Division
+			Class="row"
+			HtmlDiv="True"
+			>
+			<Division
+				Class="col-sm-12"
+				HtmlDiv="True"
+				>
+				<Label
+					Caption="Enter your first and last name"
+					Class="text-muted"
+					Format="HTML"
+					HtmlTag="H6"
+				/>
+			</Division>
+			<Division
+				Class="col-sm-4"
+				HtmlDiv="True"
+				>
+				<Label
+					Caption="First Name:"
+					Class="text-muted d-inline"
+					For="inp-firstname"
+				/>
+				<InputText
+					Class="form-control d-inline"
+					ID="inp-firstname"
+				/>
+			</Division>
+			<Division
+				Class="col-sm-4"
+				HtmlDiv="True"
+				>
+				<Label
+					Caption="Last Name:"
+					Class="text-muted"
+					For="inp-lastname"
+				/>
+				<InputText
+					Class="form-control"
+					ID="inp-lastname"
+				/>
+			</Division>
+			<Division
+				Class="col-sm-2"
+				HtmlDiv="True"
+				>
+				<Spaces/>
+				<Label
+					Caption="Send"
+					Class="btn btn-secondary d-block"
+					ID="btn-send"
+					>
+					<Action
+						ID="call-prc2"
+						Process="Day-4-1-Process"
+						TaskID="task2-Process"
+						Type="Process"
+						>
+						<Remark>
+							<LinkParams
+								inp-firstname="@Request.inp-firstname~"
+								inp-lastname="@Request.inp-lastname~"
+							/>
+						</Remark>
+					</Action>
+				</Label>
+			</Division>
+		</Division>
+		<Division
+			Class="row mt-3"
+			HtmlDiv="True"
+			ID="results"
+			>
+			<Division
+				Class="col-sm-12"
+				Condition="&apos;@Request.status2~&apos; == &apos;1&apos;"
+				HtmlDiv="True"
+				ID="sucessDiv"
+				>
+				<Label
+					Caption="Hi! @Request.results~"
+					Class="text-muted"
+					HtmlTag="H5"
+				/>
+			</Division>
+			<Division
+				Class="col-sm-12"
+				Condition="&apos;@Request.status2~&apos; == &apos;0&apos;"
+				HtmlDiv="True"
+				ID="divEmpty"
+				>
+				<Label
+					Caption="Your first name or last name are empty"
+					Class="text-muted"
+					HtmlTag="H5"
+				/>
+			</Division>
+		</Division>
+		<Remark>
+			<Division
+				Class="row mt-3"
+				HtmlDiv="True"
+				ID="results"
+				>
+				<Division
+					Class="col-sm-12"
+					HtmlDiv="True"
+					>
+					<Label
+						Caption="Process Call"
+						Class="btn btn-secondary"
+						ID="prc3"
+						>
+						<Action
+							ID="call-prc3"
+							Process="Day-4-1-Process"
+							TaskID="task3-Process"
+							Type="Process"
+						/>
+					</Label>
+				</Division>
+				<Division
+					Class="col-sm-12 mt-3"
+					HtmlDiv="True"
+					>
+					<Label
+						Caption="@Request.status3~"
+						Class="text-muted"
+						HtmlTag="H6"
+					/>
+				</Division>
+			</Division>
+		</Remark>
+	</Body>
+	<ideTestParams
+		results=""
+		status=""
+		status2=""
+	/>
+</Report>

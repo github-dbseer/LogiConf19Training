@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Chart.Workshop4.TimeSeriesDrillDown"
+	>
+	<LocalData>
+		<DataLayer
+			ConnectionID="SQLCon"
+			Source="
+select  datepart(year, OrderDate) as OrderYear, datepart(month, OrderDate) as OrderMonth, 
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end as MonthName,
+2 as BubbleSize,
+count(distinct SalesOrderNumber) as OrderCount
+	from  [dbo].[FactResellerSales]
+where datepart(month, OrderDate) between month(&apos;@Request.Series-1_MinXaxis~ &apos; + &apos; 1 2011&apos;) and month(&apos;@Request.Series-1_MaxXaxis~&apos; + &apos; 1 2011&apos;) 
+group by  datepart(year, OrderDate), datepart(month, OrderDate),
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end 
+union
+select &apos;2011&apos;, 2, &apos;Feb&apos;, 2, null
+union
+select &apos;2011&apos;, 4, &apos;Apr&apos;, 2, null
+order by datepart(month, OrderDate)"
+			Type="SQL"
+			>
+			<DataLayerLink
+				ID="dlLink1"
+			/>
+		</DataLayer>
+	</LocalData>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<Body>
+		<Label
+			Caption="Main Chart"
+			>
+			<Action
+				ID="actMainReport"
+				Type="Report"
+				>
+				<Target
+					FrameID="Self"
+					Report="Chart.Workshop4.TimeSeries"
+					Type="Report"
+				/>
+			</Action>
+		</Label>
+		<LineBreak
+			LineCount="2"
+		/>
+		<ChartCanvas>
+			<Series
+				BarStacking="SideBySide"
+				ChartXDataColumn="MonthName"
+				ChartXDataColumnType="Text"
+				ChartYDataColumn="OrderCount"
+				Color="@Constant.primary2~"
+				LegendLabel="2011"
+				Type="Bar"
+				>
+				<DataLayer
+					LinkedDataLayerID="dlLink1"
+					Type="Linked"
+					>
+					<CompareFilter
+						CompareType="="
+						CompareValue="2011"
+						DataColumn="OrderYear"
+						ID="cmpYear2011"
+					/>
+					<SortFilter
+						SortColumn="OrderMonth"
+					/>
+				</DataLayer>
+				<Quicktip>
+					<QuicktipRow
+						Caption="Order Count: "
+						Format="##,###,##0"
+						Value="@Chart.OrderCount~"
+					/>
+				</Quicktip>
+			</Series>
+			<Series
+				BarStacking="SideBySide"
+				ChartXDataColumn="MonthName"
+				ChartXDataColumnType="Text"
+				ChartYDataColumn="OrderCount"
+				Color="@Constant.primary4~"
+				LegendLabel="2012"
+				Type="Bar"
+				>
+				<DataLayer
+					LinkedDataLayerID="dlLink1"
+					Type="Linked"
+					>
+					<CompareFilter
+						CompareType="="
+						CompareValue="2012"
+						DataColumn="OrderYear"
+						ID="cmpYear2012"
+					/>
+					<SortFilter
+						SortColumn="OrderMonth"
+					/>
+				</DataLayer>
+				<Quicktip>
+					<QuicktipRow
+						Caption="Order Count: "
+						Format="##,###,##0"
+						Value="@Chart.OrderCount~"
+					/>
+				</Quicktip>
+			</Series>
+			<Series
+				BarStacking="SideBySide"
+				ChartXDataColumn="MonthName"
+				ChartXDataColumnType="Text"
+				ChartYDataColumn="OrderCount"
+				Color="@Constant.primary7~"
+				LegendLabel="2013"
+				Type="Bar"
+				>
+				<DataLayer
+					LinkedDataLayerID="dlLink1"
+					Type="Linked"
+					>
+					<CompareFilter
+						CompareType="="
+						CompareValue="2013"
+						DataColumn="OrderYear"
+						ID="cmpYear2013"
+					/>
+					<SortFilter
+						SortColumn="OrderMonth"
+					/>
+				</DataLayer>
+				<Quicktip>
+					<QuicktipRow
+						Caption="Order Count: "
+						Format="##,###,##0"
+						Value="@Chart.OrderCount~"
+					/>
+				</Quicktip>
+			</Series>
+			<ChartYAxis
+				AxisCaption="Order Count"
+			/>
+		</ChartCanvas>
+	</Body>
+	<ideTestParams
+		Series-1_MaxXaxis=""
+		Series-1_MinXaxis=""
+	/>
+</Report>

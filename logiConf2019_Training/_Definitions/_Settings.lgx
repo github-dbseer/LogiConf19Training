@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Setting
+	ID="_settings"
+	>
+	<GlobalCSS
+		ID="themeSignal"
+		Theme="Signal"
+	/>
+	<Application
+		Caption="Logi Conference 2019 - Training "
+	/>
+	<Path
+		AppPath="http://localhost/logiConf2019_Training"
+	/>
+	<General
+		rdDebuggerStyle="DebuggerLinksNoData"
+		RepoFriendly="True"
+		StudioElementSeekerPort="60668"
+	/>
+	<Connections>
+		<Connection
+			ID="MySQLServer"
+			SqlServer="localhost"
+			SqlServerDatabase="AdventureWorks2016CTP3"
+			SqlServerPassword="dbseer"
+			SqlServerPort=""
+			SqlServerUser="dbseer"
+			Type="SqlServer"
+			>
+			<Note
+				Note="for AdventureWorks2016CTP3"
+			/>
+		</Connection>
+		<Connection
+			ID="SQLCon"
+			SqlServer="localhost"
+			SqlServerDatabase="AdventureWorksDW2017"
+			SqlServerPassword="dbseer"
+			SqlServerPort=""
+			SqlServerUser="dbseer"
+			Type="SqlServer"
+			>
+			<Note
+				Note="for AdventureWorksDW2017"
+			/>
+		</Connection>
+	</Connections>
+	<Constants
+		CrossTabRowlimit="35000"
+		fontFamily="Arial,Helvetica,sans-serif"
+		heatMapHigh="#883000"
+		heatMapLow="#FDA50F"
+		heatMapMed="#FF7417"
+		primary1="#f8540b"
+		primary2="#f9933f"
+		primary3="#e0dad3"
+		primary4="#6d6782"
+		primary5="#f9b16a"
+		primary6="#411b33"
+		primary7="#c71902"
+		tblTextColor="#45D59"
+	/>
+	<Constants
+		colorTemplate="@Constant.primary1~, @Constant.primary2~, @Constant.primary3~, @Constant.primary4~, @Constant.primary5~, @Constant.primary6~"
+	/>
+	<Constants
+		heatmap_green_shade1="#F57C00"
+		heatmap_green_shade2="#EF6C00"
+		heatmap_green_shade3="#E65100"
+		heatmap_red_shade1="#FFE0B2"
+		heatmap_red_shade2="#FFCC80"
+		heatmap_red_shade3="#FFB74D"
+		heatmap_yellow_shade1="#FFA726"
+		heatmap_yellow_shade2="#FF9800"
+		heatmap_yellow_shade3="#FB8C00"
+	/>
+	<TeamDevelopment/>
+	<StartupProcess
+		Process="StartSession"
+		TaskID="setSessionVars"
+	/>
+	<Security
+		AuthenticationSource="Standard"
+		LogonPage="rdLogon.aspx"
+		RestartSession="True"
+		SecurityEnabled="False"
+		>
+		<AuthenticationRule
+			UsernameDataColumn="EmailAddress"
+			>
+			<DataLayer
+				ConnectionID="SQLCon"
+				ID="UserAuthentiation"
+				Source="SELECT e.EmailAddress, e.[BusinessEntityID]
+FROM [AdventureWorks2017].[Person].[Password] p
+	INNER JOIN [AdventureWorks2017].[Person].[EmailAddress] e 
+		ON p.BusinessEntityID=e.BusinessEntityID
+		
+WHERE e.EmailAddress=@UserName
+	AND p.PasswordHash=@Password"
+				Type="SQL"
+				>
+				<SqlParameters>
+					<SqlParameter
+						ID="UserName"
+						SqlParamType="dt-129"
+						Value="@Request.rdUserName~"
+					/>
+					<SqlParameter
+						ID="Password"
+						SqlParamType="dt-129"
+						Value="@Request.rdPassword~"
+					/>
+				</SqlParameters>
+			</DataLayer>
+			<Note
+				Note="User:"
+				>
+				<Note
+					Note="ken0@adventure-works.com"
+				/>
+				<Note
+					Note="terri0@adventure-works.com"
+				/>
+			</Note>
+			<Note
+				Note="Password:"
+				>
+				<Note
+					Note="welcome"
+				/>
+			</Note>
+		</AuthenticationRule>
+		<UserRoles
+			ID="UserRoles"
+			>
+			<DataLayer
+				ID="AuthUserRoles"
+				Source="SELECT 
+      Case When Isnull([OrganizationLevel],0)=0 then &apos;TopAccess&apos;
+	       When Isnull([OrganizationLevel],0)=1 then &apos;Manager&apos;
+		   Else &apos;Viewer&apos; End Role
+FROM [HumanResources].[Employee] e
+	INNER JOIN [Person].[EmailAddress] ea 
+		ON e.BusinessEntityID=ea.BusinessEntityID
+WHERE EmailAddress=@UserName"
+				Type="SQL"
+				>
+				<SqlParameters>
+					<SqlParameter
+						ID="UserName"
+						SqlParamType="dt-129"
+						Value="@Function.UserName~"
+					/>
+				</SqlParameters>
+			</DataLayer>
+		</UserRoles>
+		<Rights>
+			<RightsFromRoles/>
+			<Note
+				Note="Country Details"
+			/>
+			<RightsFromDataLayer
+				RightsDataColumn="CountryRegionName"
+				>
+				<DataLayer
+					ID="UserRights"
+					Source="SELECT CountryRegionName
+  FROM [AdventureWorks2017].[HumanResources].[vEmployee]
+WHERE EmailAddress=&apos;@Function.UserName~&apos;
+ "
+					Type="SQL"
+				/>
+			</RightsFromDataLayer>
+			<Remark>
+				<Note
+					Note="State/Province Details"
+				/>
+			</Remark>
+			<Remark>
+				<RightsFromDataLayer
+					RightsDataColumn="StateProvinceName"
+					>
+					<DataLayer
+						ID="UserRights"
+						Source="SELECT StateProvinceName
+  FROM [AdventureWorks2017].[HumanResources].[vEmployee]
+WHERE EmailAddress=&apos;@Function.UserName~&apos;
+ "
+						Type="SQL"
+					/>
+				</RightsFromDataLayer>
+			</Remark>
+		</Rights>
+	</Security>
+	<Remark>
+		<Security
+			AuthenticationClientAddresses="127.0.0.1,::1"
+			AuthenticationSource="SecureKey"
+			DevelopmentClientAddresses="127.0.0.1,::1"
+			RestartSession="True"
+			SecureKeySessionless="True"
+			SecurityEnabled="True"
+			>
+			<Note
+				Note="Use this one to get the parent app working "
+			/>
+		</Security>
+	</Remark>
+	<SessionTimeout
+		SessionAutoKeepAlive="True"
+	/>
+	<Globalization
+		MetricPrefixString="a,f,p,n,µ,m,k,M,B,T,P,E"
+	/>
+	<ideTestParams
+		rdPassword=""
+		rdUserName=""
+	/>
+</Setting>

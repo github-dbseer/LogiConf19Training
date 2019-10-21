@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Chart.Workshop3.KPI"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<Body>
+		<Division
+			Class="page-container"
+			HtmlDiv="True"
+			ID="pageContainer"
+			>
+			<Division
+				Class="page-content-wrapper"
+				HtmlDiv="True"
+				ID="pageContentWrapper"
+				>
+				<Division
+					Class="page-content"
+					HtmlDiv="True"
+					ID="pageContent"
+					>
+					<Division
+						Class="row"
+						HtmlDiv="True"
+						ID="KPIs-row3"
+						>
+						<Note
+							Note="On time"
+						/>
+						<Division
+							Class="col-6"
+							HtmlDiv="True"
+							ID="FlightsChart"
+							>
+							<Division
+								Class="dashboard-stat2 shadow-lg p-3 mb-5 bg-white rounded kpi-custom"
+								HtmlDiv="True"
+								ID="flightsChart-Portlet"
+								>
+								<Division
+									Class="display"
+									HtmlDiv="True"
+									ID="flightsChart-portlet-title"
+									>
+									<Division
+										Class="icon-kpi-custom text-right"
+										HtmlDiv="True"
+										>
+										<Label
+											Class="fa fa-globe xs"
+											HtmlTag="I"
+										/>
+									</Division>
+									<Division
+										Class="number text-muted"
+										HtmlDiv="True"
+										ID="flightsChart-Number"
+										>
+										<Label
+											Caption="&lt;span data-counter=&quot;counterup&quot; data-value=&quot;439,567&quot;&gt;439,567&lt;/span&gt;
+"
+											Class="text-left main-color-2"
+											Format="HTML"
+											HtmlTag="H3"
+										/>
+										<Label
+											Caption="&lt;small&gt;Orders&lt;/small&gt;"
+											Class="text-left text-uppercase"
+											Format="HTML"
+											HtmlTag="H3"
+										/>
+									</Division>
+								</Division>
+								<Division
+									Class="progress-info "
+									HtmlDiv="True"
+									ID="flightsChart-portlet-body"
+									>
+									<Division
+										HtmlDiv="True"
+										ID="flightsChart-progress"
+										>
+										<ChartCanvas
+											ChartHeight="60"
+											ID="ChartCanvasOrder"
+											SpacingBottom="5"
+											SpacingLeft="0"
+											SpacingRight="0"
+											SpacingTop="0"
+											>
+											<DataLayer
+												ConnectionID="SQLCon"
+												ID="SQLDataLayer1"
+												Source="select  datepart(year, OrderDate) as OrderYear, datepart(month, OrderDate) as OrderMonth,
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end as MonthName,
+sum(salesAmount) as Sales
+    from [dbo].[FactResellerSales]
+where datepart(year, OrderDate) = &apos;2012&apos;
+group by datepart(year, OrderDate), datepart(month, OrderDate),
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end 
+order by datepart(month, OrderDate) 
+ "
+												Type="SQL"
+											/>
+											<Series
+												ChartXDataColumn="OrderMonth"
+												ChartXDataColumnType="Text"
+												ChartYDataColumn="Sales"
+												Color="@Constant.primary2~"
+												LinkedToXAxisID="xAxis"
+												LinkedToYAxisID="yAxis"
+												Type="Bar"
+												>
+												<Quicktip>
+													<QuicktipRow
+														Caption="Month:"
+														Value="@Chart.MonthName~"
+													/>
+													<QuicktipRow
+														Caption="Sales:"
+														Format="###,###,##0.00 mp"
+														Value="@Chart.Sales~"
+													/>
+												</Quicktip>
+											</Series>
+											<ChartYAxis
+												HideAxis="True"
+												ID="yAxis"
+											/>
+											<ChartXAxis
+												HideAxis="True"
+												ID="xAxis"
+												>
+												<ChartTicksAndGrid
+													TickInterval="Days"
+												/>
+											</ChartXAxis>
+										</ChartCanvas>
+									</Division>
+								</Division>
+							</Division>
+						</Division>
+						<Division
+							Class="col-6"
+							HtmlDiv="True"
+							ID="KPI2"
+							>
+							<Division
+								Class="dashboard-stat2 shadow-lg p-3 mb-5 bg-white rounded  kpi-custom"
+								HtmlDiv="True"
+								ID="flightsChart-Portlet"
+								>
+								<Division
+									Class="display"
+									HtmlDiv="True"
+									ID="flightsChart-portlet-title"
+									>
+									<Division
+										Class="icon-kpi-custom text-right"
+										HtmlDiv="True"
+										>
+										<Label
+											Class="fa fa-bell-o fa-xs"
+											HtmlTag="I"
+										/>
+									</Division>
+									<Division
+										Class="number text-muted"
+										HtmlDiv="True"
+										ID="flightsChart-Number"
+										>
+										<Label
+											Caption="&lt;span data-counter=&quot;counterup&quot; data-value=&quot;1.124M&quot;&gt;1.124M&lt;/span&gt;
+"
+											Class="text-left main-color-4"
+											Format="HTML"
+											HtmlTag="H3"
+										/>
+										<Label
+											Caption="&lt;small&gt;Target&lt;/small&gt;"
+											Class="text-left text-uppercase"
+											Format="HTML"
+											HtmlTag="H3"
+										/>
+									</Division>
+								</Division>
+								<Division
+									Class="progress-info"
+									HtmlDiv="True"
+									ID="flightsChart-portlet-body"
+									>
+									<Division
+										HtmlDiv="True"
+										ID="flightsChart-progress"
+										>
+										<Gauge
+											BulletColor="@Constant.primary4~"
+											MarkerValue="SalesAmountQuota"
+											PlotBackgroundColor="Gainsboro"
+											StartValue="0"
+											TickColor="#48525e"
+											TickLabelFormat="mp"
+											Type="BulletBar"
+											Value="@Data.SalesAmount~"
+											>
+											<GaugeRange
+												Color="#efebe8"
+												RangeEndValue="@Data.SalesAmountQuota~"
+											/>
+											<DataLayer
+												ConnectionID="SQLCon"
+												Source="select top 1 E.FirstName + &apos; &apos; + E.LastName as EmpName, datepart(year, OrderDate) as OrderYear, datepart(quarter, OrderDate) as OrderQtr , sum(SalesAmount) as SalesAmount , avg(Q.SalesAmountQuota) as SalesAmountQuota
+from [dbo].[FactResellerSales] S
+	inner join [dbo].[FactSalesQuota] Q on S.EmployeeKey = Q.EmployeeKey and datepart(year, OrderDate) = Q.CalendarYear and datepart(quarter, OrderDate) = Q.CalendarQuarter
+	inner join [dbo].[DimEmployee] E on S.EmployeeKey = E.EmployeeKey
+where datepart(year, OrderDate) =  &apos;2013&apos;
+and datepart(quarter, OrderDate) = 3
+group by  E.FirstName + &apos; &apos; + E.LastName, datepart(year, OrderDate), datepart(quarter, OrderDate) 
+order by  sum(SalesAmount) desc"
+												Type="SQL"
+											/>
+											<Quicktip>
+												<QuicktipRow
+													Caption="Target:"
+													Format="###,###,##0.00 mp"
+													Value="@Data.SalesAmountQuota~"
+												/>
+												<QuicktipRow
+													Caption="Sales:"
+													Format="###,###,##0.00 mp"
+													Value="@Data.SalesAmount~"
+												/>
+											</Quicktip>
+										</Gauge>
+									</Division>
+								</Division>
+							</Division>
+						</Division>
+					</Division>
+				</Division>
+			</Division>
+		</Division>
+	</Body>
+	<ideTestParams/>
+</Report>

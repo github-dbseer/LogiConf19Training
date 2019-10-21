@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Chart.Workshop2.HeatMap"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<Body>
+		<ChartCanvas>
+			<Series
+				HeatmapColorDataColumn="ProfitPerc"
+				HeatmapLabelDataColumn="ProductName"
+				HeatmapSizeDataColumn="Sales"
+				HighValueColor="#FCE3D5"
+				LowValueColor="#EC7D32"
+				MediumValueColor="#F3B083"
+				Type="Heatmap"
+				>
+				<HeatmapGroup
+					BackgroundColor="#d3d3d3"
+					CellBorderThickness="0"
+					DataColumn="ProductCategoryName"
+					FontColor="#48525e"
+					FontFamily="@Constant.fontFamily~"
+					FontWeight="Bolder"
+				/>
+				<HeatmapLabelStyle
+					DarkBackgroundFontColor="#fff"
+					FontFamily="@Constant.fontFamily~"
+					LightBackgroundFontColor="#fff"
+				/>
+				<Quicktip
+					Title="@Chart.ProductName~"
+					>
+					<QuicktipRow
+						Caption="Sales:"
+						Format="###,###,##0.00 mp"
+						Value="@Chart.Sales~"
+					/>
+					<QuicktipRow
+						Caption="Profit %:"
+						Format="##.##%"
+						Value="@Chart.ProfitVal~"
+					/>
+				</Quicktip>
+			</Series>
+			<DataLayer
+				ConnectionID="SQLCon"
+				Source="
+select ProductName, ProductCategoryName, OrderYear, Sales, ProfitPerc, ProfitVal
+from (
+	select EnglishProductName as ProductName,  PC.EnglishProductCategoryName as ProductCategoryName,  datepart(year, OrderDate) as OrderYear, sum(salesamount) as Sales,
+	(( sum(SalesAmount) - sum(TotalProductCost))*100)/ sum(TotalProductCost) as ProfitPerc  ,
+	(( sum(SalesAmount) - sum(TotalProductCost)))/ sum(TotalProductCost) as ProfitVal  ,
+	ROW_NUMBER() 
+		over (
+			PARTITION BY PC.EnglishProductCategoryName  
+			order by sum(salesamount) desc
+		) AS RowNo
+	from  [dbo].[FactResellerSales] F
+		inner join [dbo].[DimProduct] P on F.ProductKey = P.ProductKey
+		inner join [dbo].[DimProductSubcategory] PSC on P.ProductSubcategoryKey = PSC.ProductSubcategoryKey
+		inner join  [dbo].[DimProductCategory] PC on PSC.ProductCategoryKey = PC.ProductCategoryKey
+	where datepart(year, OrderDate) = &apos;2012&apos;
+	group by EnglishProductName,  PC.EnglishProductCategoryName, datepart(year, OrderDate) 
+) a
+where RowNo &lt;= 10"
+				Type="SQL"
+			/>
+			<ChartCaptionStyle
+				FontFamily="Arial,Helvetica,sans-serif"
+			/>
+			<ChartSubCaptionStyle
+				FontFamily="Arial,Helvetica,sans-serif"
+			/>
+		</ChartCanvas>
+	</Body>
+	<ideTestParams/>
+</Report>

@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Tables.Workshop2.BasicDataTable"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<DefaultRequestParams
+		inp_Year="2011"
+		name="Workshop2"
+	/>
+	<Body>
+		<Division
+			Class="form-group row"
+			HtmlDiv="True"
+			ID="divFilter"
+			>
+			<HtmlTag
+				Class="col-sm-1 col-form-label"
+				HtmlTagName="label"
+				>
+				<HtmlAttributeParams
+					for="inp_year"
+				/>
+				<Label
+					Caption="Year"
+					Class="text-muted"
+					HtmlTag="H6"
+				/>
+			</HtmlTag>
+			<Division
+				Class="col-sm-3"
+				>
+				<InputSelectList
+					Class="form-control"
+					ID="inp_year"
+					OptionCaptionColumn="Year"
+					OptionValueColumn="Year"
+					>
+					<DataLayer
+						ConnectionID="SQLCon"
+						Source="
+ select distinct datepart(year, OrderDate) as Year
+ from [dbo].[FactInternetSales]
+ where datepart(year, OrderDate) &gt; 2010
+ order by datepart(year, OrderDate) "
+						Type="SQL"
+					/>
+					<EventHandler
+						DhtmlEvent="onchange"
+						>
+						<Action
+							ElementID="divTable"
+							ID="act_ref_table"
+							Type="RefreshElement"
+						/>
+					</EventHandler>
+				</InputSelectList>
+			</Division>
+		</Division>
+		<Division
+			ID="divTable"
+			>
+			<DataTable
+				AccessibleHeaders="True"
+				AccessibleSummary="DataTable"
+				AjaxPaging="True"
+				Class="table table-striped table-bordered table-responsive mw-100"
+				ColumnHeaderClass="custom-header text-center tbl-header"
+				ID="dtOrders"
+				KeepScrollPosition="True"
+				RememberSort="True"
+				ResizableColumns="True"
+				SortArrows="True"
+				Width="100"
+				WidthScale="%"
+				>
+				<DataLayer
+					ConnectionID="SQLCon"
+					ID="dlOrderData"
+					Source="select datepart(year, OrderDate) as Year, 
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end as MonthName, sum(SalesAmount) as Sales, sum(TotalProductCost) as Cost, sum(Freight) as Freight, sum(TaxAmt) as Taxes
+from [dbo].[FactInternetSales]
+group by datepart(year, OrderDate), datepart(month, OrderDate) ,
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end 
+order by datepart(year, OrderDate) , datepart(month, OrderDate)
+"
+					Type="SQL"
+					>
+					<CompareFilter
+						CompareType="="
+						CompareValue="@Request.inp_Year~"
+						DataColumn="Year"
+						ID="cmp_Year"
+					/>
+				</DataLayer>
+				<InteractivePaging
+					CaptionType="Image"
+					HideShowPrevNextCaptions="False"
+					HideWhenOnePage="True"
+					IDnotSupportedHere="pagingTableNumbered"
+					Location="Top"
+					PageRowCount="20"
+					ShowPageNumber="Numbered"
+				/>
+				<DataTableColumn
+					Header="Year"
+					ID="colYear"
+					>
+					<Label
+						Caption="@Data.Year~"
+						ID="lblYear"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="Year"
+						DataType="Number"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Header="Month"
+					ID="colMonthName"
+					>
+					<Label
+						Caption="@Data.MonthName~"
+						ID="lblMonthName"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="MonthName"
+						DataType="Text"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Class="text-align-right"
+					Header="Sales"
+					ID="colSales"
+					>
+					<Label
+						Caption="@Data.Sales~"
+						Format="Currency"
+						ID="lblSales"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="Sales"
+						DataType="Number"
+					/>
+					<DataColumnSummary
+						DataColumn="Sales"
+						Function="Sum"
+						ID="sum_Sales"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Class="text-align-right"
+					Header="Cost"
+					ID="colCost"
+					>
+					<Label
+						Caption="@Data.Cost~"
+						Format="Currency"
+						ID="lblCost"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="Cost"
+						DataType="Number"
+					/>
+					<DataColumnSummary
+						DataColumn="Cost"
+						Function="Sum"
+						ID="sum_Cost"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Class="text-align-right"
+					Header="Freight"
+					ID="colFreight"
+					>
+					<Label
+						Caption="@Data.Freight~"
+						Format="Currency"
+						ID="lblFreight"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="Freight"
+						DataType="Number"
+					/>
+					<DataColumnSummary
+						DataColumn="Freight"
+						Function="Sum"
+						ID="sum_Freight"
+					/>
+				</DataTableColumn>
+				<DataTableColumn
+					Class="text-align-right"
+					Header="Taxes"
+					ID="colTaxes"
+					>
+					<Label
+						Caption="@Data.Taxes~"
+						Format="Currency"
+						ID="lblTaxes"
+						rdForWizardSet="true"
+					/>
+					<DataColumnSort
+						DataColumn="Taxes"
+						DataType="Number"
+					/>
+					<DataColumnSummary
+						DataColumn="Taxes"
+						Function="Sum"
+						ID="sum_Taxes"
+					/>
+				</DataTableColumn>
+				<SummaryRow
+					Class="summary-row"
+					>
+					<Column
+						ColSpan="2"
+						>
+						<Label
+							Caption="Total:"
+						/>
+					</Column>
+					<Column
+						Class="text-align-right"
+						>
+						<Label
+							Caption="@Data.sum_Sales~"
+							Format="Currency"
+						/>
+					</Column>
+					<Column
+						Class="text-align-right"
+						>
+						<Label
+							Caption="@Data.sum_Cost~"
+							Format="Currency"
+						/>
+					</Column>
+					<Column
+						Class="text-align-right"
+						>
+						<Label
+							Caption="@Data.sum_Freight~"
+							Format="Currency"
+						/>
+					</Column>
+					<Column
+						Class="text-align-right"
+						>
+						<Label
+							Caption="@Data.sum_Taxes~"
+							Format="Currency"
+						/>
+					</Column>
+				</SummaryRow>
+			</DataTable>
+		</Division>
+	</Body>
+	<ideTestParams
+		inp_Year=""
+	/>
+</Report>

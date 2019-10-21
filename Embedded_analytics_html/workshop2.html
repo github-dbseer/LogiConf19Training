@@ -1,0 +1,127 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Embedding Dynamic Reports using Javascript</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <h1>Embedding Dynamic Reports using Javascript 2</h1>
+
+
+
+
+
+    <div class="container">
+        <divc class="row">
+            <div class="col-sm-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputReportSelect">Reports</label>
+                    </div>
+                    <select class="custom-select" id="inputReportSelect">
+                        <option selected value="Embedded_Analytics.Workshop2">Report</option>
+                        <option value="Embedded_Analytics.Workshop3">Report 2</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4" id="yearSelector">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputCustomerSelect">Year</label>
+                    </div>
+                    <select class="custom-select" id="inputCustomerSelect">
+                        <option selected value="">All</option>
+                        <option value="2010">2010</option>
+                        <option value="2011">2011</option>
+                        <option value="2012">2012</option>
+                        <option value="2013">2013</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4" id="chartType" style="display: none;">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputCustomerSelect2">Chart</label>
+                    </div>
+                    <select class="custom-select" id="inputCustomerSelect2">
+                        <option selected value="spline">Spline Area</option>
+                        <option value="bubble">Bubble</option>
+                        <option value="bar">Bar</option>
+                        <option value="area">Area</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <button type="button" class="btn btn-primary" id="btn-create">Run</button>
+            </div>
+        </divc>
+    </div>
+
+    <!-- Change 
+        data-applicationUrl: to your local logi app URL
+        data-report: report name -->
+    <div id="reportContainer" data-applicationUrl="http://localhost/logiConf2019_Training" data-report="Embedded_Analytics.Workshop2" data-autoSizing="height"></div>
+
+
+
+
+
+<!-- Change the src to your logi application URL -->
+    <script src="rdEmbed.js" type="text/Javascript"></script>
+    
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+        //create option object
+
+
+        function changeReportReport() {
+            var sReport = $("#inputReportSelect").val();
+
+            if($('#chartType').is(":hidden")){
+                var sCustomer = $("#inputCustomerSelect").val();
+            } else {
+                var sCustomer = $("#inputCustomerSelect2").val();
+            }
+            
+
+            //get the report object 
+            var reportObj = EmbeddedReporting.get("reportContainer");
+            //remove all params first
+            reportObj.removeAllParams();
+            //get the params from select dropdown and set it to the object
+            reportObj.setParam($('#chartType').is(":hidden") ?  'year' : 'chart', sCustomer);
+            //get the params from select dropdown and set it to the object
+            reportObj.report = sReport;
+            // load the report
+            reportObj.loadReport();
+
+        }
+
+
+        //attach events to the btns 
+        $("#btn-create").click(function () {
+            changeReportReport();
+
+        });
+        $('#inputReportSelect').change(() => {
+            const val = $('#inputReportSelect').val();
+            if(val === 'Embedded_Analytics.Workshop3'){
+                $('#chartType').show();
+                $('#yearSelector').hide();
+            } else {
+                $('#chartType').hide();
+                $('#yearSelector').show();
+            }
+        });
+    </script>
+</body>
+
+</html>

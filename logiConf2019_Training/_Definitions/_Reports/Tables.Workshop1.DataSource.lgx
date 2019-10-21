@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Tables.Workshop1.DataSource"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<DefaultRequestParams
+		inp_year="2011"
+		name="Workshop1"
+	/>
+	<Body>
+		<Division
+			Class="form-group row"
+			HtmlDiv="True"
+			ID="divFilter"
+			>
+			<HtmlTag
+				Class="col-sm-1 col-form-label"
+				HtmlTagName="label"
+				>
+				<HtmlAttributeParams
+					for="inp_year"
+				/>
+				<Label
+					Caption="Year"
+					Class="text-muted"
+					HtmlTag="H6"
+				/>
+			</HtmlTag>
+			<Division
+				Class="col-sm-3"
+				>
+				<InputSelectList
+					Class="form-control"
+					ID="inp_year"
+					OptionCaptionColumn="Year"
+					OptionValueColumn="Year"
+					>
+					<DataLayer
+						ConnectionID="SQLCon"
+						Source="
+ select distinct datepart(year, OrderDate) as Year
+ from [dbo].[FactInternetSales]
+ where datepart(year, OrderDate) &gt; 2010
+ order by datepart(year, OrderDate) "
+						Type="SQL"
+					/>
+					<EventHandler
+						DhtmlEvent="onchange"
+						>
+						<Action
+							ElementID="divTable"
+							ID="act_ref_table"
+							Type="RefreshElement"
+						/>
+					</EventHandler>
+				</InputSelectList>
+			</Division>
+		</Division>
+		<Division
+			ID="divTable"
+			>
+			<DataTable
+				AjaxPaging="True"
+				Class="tbl-align table table-striped table-bordered table-responsive mw-100"
+				ColumnHeaderClass="custom-header text-center"
+				ID="dtOrders"
+				RowTextColor="@Constant.colorTemplate~"
+				Width="100"
+				WidthScale="%"
+				>
+				<DataLayer
+					ConnectionID="SQLCon"
+					Source="select datepart(year, OrderDate) as Year, 
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end as [Month], sum(SalesAmount) as Sales, sum(TotalProductCost) as Cost, sum(Freight) as Freight, sum(TaxAmt) as Taxes
+from [dbo].[FactInternetSales]
+where datepart(year, OrderDate) = &apos;@Request.inp_year~&apos;
+group by datepart(year, OrderDate), datepart(month, OrderDate) ,
+case when datepart(month, OrderDate) = 1 then &apos;Jan&apos;
+when datepart(month, OrderDate) = 2 then &apos;Feb&apos;
+when datepart(month, OrderDate) = 3 then &apos;Mar&apos;
+when datepart(month, OrderDate) = 4 then &apos;Apr&apos;
+when datepart(month, OrderDate) = 5 then &apos;May&apos;
+when datepart(month, OrderDate) = 6 then &apos;Jun&apos;
+when datepart(month, OrderDate) = 7 then &apos;Jul&apos;
+when datepart(month, OrderDate) = 8 then &apos;Aug&apos;
+when datepart(month, OrderDate) = 9 then &apos;Sep&apos;
+when datepart(month, OrderDate) = 10 then &apos;Oct&apos;
+when datepart(month, OrderDate) = 11 then &apos;Nov&apos;
+when datepart(month, OrderDate) = 12 then &apos;Dec&apos;
+end 
+order by datepart(year, OrderDate) , datepart(month, OrderDate)
+"
+					Type="SQL"
+				/>
+				<AutoColumns/>
+				<Remark>
+					<InteractivePaging
+						CaptionType="Text"
+						PageRowCount="20"
+						ShowPageNumber="True"
+					/>
+				</Remark>
+				<InteractivePaging
+					CaptionType="Text"
+					HideShowPrevNextCaptions="True"
+					HideWhenOnePage="True"
+					Location="Bottom"
+					PageRowCount="5"
+					ShowPageNumber="Numbered"
+				/>
+			</DataTable>
+		</Division>
+	</Body>
+	<ideTestParams
+		inp_year=""
+	/>
+</Report>

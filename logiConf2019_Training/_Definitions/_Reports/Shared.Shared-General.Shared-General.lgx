@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Shared.Shared-General.Shared-General"
+	>
+	<Body/>
+	<SharedElement
+		ID="CSSFILES"
+		>
+		<StyleSheet
+			ShowModes="rdBrowser"
+			StyleSheet="Framework.bootstrap.bootstrap.min.css"
+		/>
+		<StyleSheet
+			ShowModes="rdBrowser"
+			StyleSheet="Fonts.combined.css"
+		/>
+		<StyleSheet
+			ShowModes="rdBrowser, rdExportPdf"
+			StyleSheet="MainCSS.css"
+		/>
+		<StyleSheet
+			ShowModes="rdBrowser"
+			StyleSheet="Fonts.combined.css"
+		/>
+	</SharedElement>
+	<SharedElement
+		ID="JAVASC"
+		>
+		<IncludeScriptFile
+			ID="jquery"
+			IncludedScriptFile="Framework.bootstrap.jquery.min.js"
+		/>
+		<IncludeScriptFile
+			IncludedScriptFile="Framework.bootstrap.bootstrap.min.js"
+		/>
+	</SharedElement>
+</Report>

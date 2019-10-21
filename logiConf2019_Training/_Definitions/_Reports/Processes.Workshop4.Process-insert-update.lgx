@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Training.Day4-3-Process-insert-update"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<DefaultRequestParams
+		title="Insert Update Table Record"
+	/>
+	<Note>
+		<Note
+			Note="Insert Process"
+		/>
+		<Note
+			Note="Update Process"
+		/>
+		<Note
+			Note="Delete Process"
+		/>
+		<Note
+			Note="Error Handling"
+		/>
+	</Note>
+	<Body>
+		<Division
+			Class="row"
+			HtmlDiv="True"
+			ID="row-insert"
+			>
+			<Division
+				Class="col-sm-3"
+				HtmlDiv="True"
+				ID="col-countrycode"
+				>
+				<InputText
+					Class="form-control"
+					ID="countrycode"
+					Placeholder="Insert country region code"
+				/>
+			</Division>
+			<Division
+				Class="col-sm-3"
+				HtmlDiv="True"
+				ID="col-name"
+				>
+				<InputText
+					Class="form-control"
+					ID="name"
+					Placeholder="Insert name"
+				/>
+			</Division>
+			<Division
+				Class="col-sm-3"
+				HtmlDiv="True"
+				ID="col-insert-btn"
+				>
+				<Label
+					Caption="Insert Record"
+					Class="btn btn-secondary"
+					ID="btn-insert"
+					>
+					<Action
+						ID="act-call-insert-prc"
+						Process="Day-4-3-ProcessInsertUpdate"
+						TaskID="tsk-insert-record"
+						Type="Process"
+						>
+						<Remark>
+							<LinkParams
+								countrycode="@Request.countrycode~"
+								name="@Request.name~"
+							/>
+						</Remark>
+					</Action>
+				</Label>
+			</Division>
+		</Division>
+		<HR
+			Class="mt-2 mb-2"
+		/>
+		<Division
+			Class="row"
+			HtmlDiv="True"
+			ID="row-update"
+			>
+			<Division
+				Class="col-sm-3"
+				HtmlDiv="True"
+				ID="col-countrycode"
+				>
+				<InputSelectList
+					Class="form-control"
+					ID="inpCountryRegionCode"
+					MultiSelect="False"
+					OptionCaptionColumn="CountryRegionCode"
+					OptionValueColumn="CountryRegionCode"
+					>
+					<DataLayer
+						ConnectionID="MySQLServer"
+						ID="dtCountryCode"
+						Source="select top 10 [CountryRegionCode] from [Person].[CountryRegion] 
+order by [ModifiedDate] desc"
+						Type="SQL"
+					/>
+				</InputSelectList>
+			</Division>
+			<Division
+				Class="col-sm-3"
+				HtmlDiv="True"
+				ID="col-name"
+				>
+				<InputText
+					Class="form-control"
+					ID="inpName"
+					Placeholder="Insert New Name"
+				/>
+			</Division>
+			<Division
+				Class="col-sm-3"
+				HtmlDiv="True"
+				ID="col-insert-btn"
+				>
+				<Label
+					Caption="Update Record"
+					Class="btn btn-secondary"
+					ID="btn-update"
+					>
+					<Action
+						ID="prc-update-record"
+						Process="Day-4-3-ProcessInsertUpdate"
+						TaskID="tsk-update-record"
+						Type="Process"
+						>
+						<Remark>
+							<LinkParams
+								inpCountryRegionCode="@Request.inpCountryRegionCode~"
+							/>
+						</Remark>
+						<Remark>
+							<LinkParams
+								inpName="@Request.inpName~"
+							/>
+						</Remark>
+					</Action>
+				</Label>
+			</Division>
+		</Division>
+		<Rows
+			ID="row-results"
+			Width="50"
+			WidthScale="%"
+			>
+			<Row>
+				<Column
+					ID="col-table"
+					Width="50"
+					WidthScale="%"
+					>
+					<Division
+						Condition="&apos;@Request.status~&apos; == &apos;1&apos;"
+						ID="sucess-results"
+						>
+						<Label
+							Caption="record inserted/updated successfully"
+							Class="text-success font-weight-bold"
+						/>
+					</Division>
+					<Division
+						Condition="&apos;@Request.status~&apos; == &apos;0&apos;"
+						ID="failed-results"
+						>
+						<Label
+							Caption="Failed to insert/update records "
+							Class="text-danger font-weight-bold"
+						/>
+						<Label
+							Caption="Reason:"
+							Class="text-muted"
+						/>
+						<LineBreak/>
+						<Label
+							Caption="@Request.reason~"
+							Class="text-muted"
+						/>
+					</Division>
+				</Column>
+			</Row>
+		</Rows>
+		<DataTable
+			Class="table table-striped table-bordered"
+			ColumnHeaderClass="text-center tbl-header"
+			ID="dtDay4-table"
+			Width="100"
+			WidthScale="%"
+			>
+			<InteractivePaging
+				CaptionType="Text"
+				HideShowPrevNextCaptions="True"
+				HideWhenOnePage="True"
+				Location="Top"
+				PageRowCount="20"
+				ShowPageNumber="Numbered"
+			/>
+			<DataLayer
+				ConnectionID="MySQLServer"
+				ID="dtCountry"
+				Source="select  * from [Person].[CountryRegion] 
+order by [ModifiedDate] desc"
+				Type="SQL"
+			/>
+			<DataTableColumn
+				Header="CountryRegionCode"
+				ID="colCountryRegionCode"
+				>
+				<Label
+					Caption="@Data.CountryRegionCode~"
+					ID="lblCountryRegionCode"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="Name"
+				ID="colName"
+				>
+				<Label
+					Caption="@Data.Name~"
+					ID="lblName"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="ModifiedDate"
+				ID="colModifiedDate"
+				>
+				<Label
+					Caption="@Data.ModifiedDate~"
+					Format="Short Date"
+					ID="lblModifiedDate"
+				/>
+				<DataColumnSort
+					DataColumn="ModifiedDate"
+					DataType="Date"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="Action"
+				ID="coldelete"
+				>
+				<Label
+					Caption="Delete"
+					ID="lbldelete"
+					>
+					<Action
+						ID="tsk-delete-record"
+						Process="Day-4-3-ProcessInsertUpdate"
+						TaskID="tsk-delete-record"
+						Type="Process"
+						>
+						<Remark>
+							<LinkParams
+								inpCountryRegionCode="@Data.CountryRegionCode~"
+							/>
+						</Remark>
+					</Action>
+				</Label>
+			</DataTableColumn>
+		</DataTable>
+	</Body>
+	<ideTestParams
+		reason=""
+		status=""
+	/>
+</Report>

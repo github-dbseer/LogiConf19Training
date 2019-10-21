@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Training.Day4-2-ProcessSessions"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<DefaultRequestParams
+		title="Day4_Processes-Setting Session param "
+	/>
+	<Note>
+		<Note
+			Note="Review Setting Session Variable "
+		/>
+		<Note
+			Note="Review How to setup session in Startup Process"
+		/>
+		<Note
+			Note="Review How to setup session from Input Param"
+		/>
+	</Note>
+	<Body>
+		<Rows
+			ID="rowSetUserSession"
+			>
+			<Row>
+				<Column>
+					<Label
+						Caption="click on the button to set user session"
+						Class="text-muted"
+						HtmlTag="H6"
+					/>
+				</Column>
+			</Row>
+			<Row
+				ID="call-process-setSession"
+				>
+				<Column>
+					<Label
+						Caption="Set User Session"
+						Class="btn btn-secondary"
+						ID="prc1"
+						>
+						<Action
+							ID="call-prc1"
+							Process="Day-4-2-Process-SettingSession"
+							TaskID="tsk-setUserSessoin"
+							Type="Process"
+						/>
+					</Label>
+				</Column>
+				<Column>
+					<Division
+						Condition="&apos;@Session.userId~&apos; == &apos;&apos;"
+						ID="emptyUserSessoin"
+						>
+						<Label
+							Caption="No Users Set in sessoin"
+							Class="text-muted"
+							HtmlTag="H6"
+						/>
+					</Division>
+					<Division
+						Condition="&apos;@Session.userId~&apos; != &apos;&apos;"
+						ID="notEmptyUserSessoin"
+						>
+						<Label
+							Caption="UserID:"
+							Class="text-muted"
+							For="lbluserid"
+							HtmlTag="H6"
+						/>
+						<Spaces/>
+						<Label
+							Caption="@Session.userid~"
+							Class="ThemeTextNegative ThemeTextLarge"
+							ErrorResult=" "
+							ID="lbluserid"
+						/>
+						<LineBreak/>
+						<Label
+							Caption="User name:"
+							Class="text-muted"
+							For="lblusername"
+							HtmlTag="H6"
+						/>
+						<Spaces/>
+						<Label
+							Caption="@Session.username~"
+							Class="ThemeTextNegative ThemeTextLarge"
+							ID="lblusername"
+						/>
+					</Division>
+				</Column>
+				<Column
+					ID="sep-column"
+					>
+					<HR/>
+				</Column>
+			</Row>
+		</Rows>
+		<Rows
+			ID="rowSessionFromStartup"
+			>
+			<Row>
+				<Column>
+					<Label
+						Caption="This the session Value from The Startup Process"
+					/>
+				</Column>
+			</Row>
+			<Row
+				ID="call-process-setSession"
+				>
+				<Column>
+					<Division
+						ID="notEmptyUserSessoin"
+						>
+						<Label
+							Caption="Start up session User name:"
+							Class="ThemeTextPositive"
+							For="lblusername"
+						/>
+						<Spaces/>
+						<Label
+							Caption="@Session.startusername~"
+							Class="ThemePaddingLarger"
+							For="lblusername"
+						/>
+					</Division>
+				</Column>
+			</Row>
+			<Row>
+				<Column
+					ID="sep-column"
+					>
+					<HR/>
+				</Column>
+			</Row>
+		</Rows>
+		<Division
+			Class="row"
+			HtmlDiv="True"
+			>
+			<Division
+				Class="col-sm-12"
+				HtmlDiv="True"
+				>
+				<Label
+					Caption="enter user name and id then click on the button to set user session"
+					Class="text-muted"
+					HtmlTag="H6"
+				/>
+			</Division>
+			<Division
+				Class="col-sm-3"
+				HtmlDiv="True"
+				>
+				<Label
+					Caption="user Name"
+					Class="text-muted"
+					For="username"
+				/>
+				<InputText
+					Class="form-control"
+					ID="username"
+				/>
+			</Division>
+			<Division
+				Class="col-sm-3"
+				HtmlDiv="True"
+				>
+				<Label
+					Caption="user id"
+					Class="text-muted"
+					For="userid"
+				/>
+				<InputText
+					Class="form-control"
+					ID="userid"
+				/>
+			</Division>
+		</Division>
+		<Division
+			Class="row mt-2"
+			HtmlDiv="True"
+			>
+			<Division
+				Class="col-sm-3"
+				HtmlDiv="True"
+				>
+				<Label
+					Caption="Set User Session from inputs"
+					Class="btn btn-secondary"
+					ID="prc1"
+					>
+					<Action
+						ID="call-prc2"
+						Process="Day-4-2-Process-SettingSession"
+						TaskID="tsk-setUserSessoinInput"
+						Type="Process"
+						>
+						<Remark>
+							<LinkParams
+								userid="@Request.userid~"
+								username="@Request.username~"
+							/>
+						</Remark>
+					</Action>
+				</Label>
+			</Division>
+		</Division>
+	</Body>
+	<ideTestParams/>
+</Report>

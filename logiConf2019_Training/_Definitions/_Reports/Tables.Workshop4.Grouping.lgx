@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Session1.Tables.Workshop4.Grouping"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<Body>
+		<DataTable
+			AccessibleHeaders="True"
+			AccessibleSummary="DataTable"
+			Class="table table-striped table-bordered table-responsive mw-100 tbl-align"
+			ColumnHeaderClass="text-dark text-center "
+			ID="dtRegionGroup"
+			KeepScrollPosition="True"
+			RememberSort="True"
+			ResizableColumns="True"
+			SortArrows="True"
+			TableBorder="0"
+			>
+			<Remark>
+				<InteractivePaging
+					CaptionType="Image"
+					HideShowPrevNextCaptions="False"
+					HideWhenOnePage="True"
+					IDnotSupportedHere="pagingTableNumbered"
+					Location="Top"
+					PageRowCount="20"
+					ShowPageNumber="Numbered"
+				/>
+			</Remark>
+			<InteractivePaging
+				CaptionType="Text"
+				HideShowPrevNextCaptions="True"
+				HideWhenOnePage="True"
+				Location="Bottom"
+				PageRowCount="20"
+				ShowPageNumber="Numbered"
+			/>
+			<DataLayer
+				ConnectionID="SQLCon"
+				ID="dlRegionGroup"
+				Source="select ST.SalesTerritoryRegion as Region, PC.EnglishProductCategoryName as ProductCategoryName, PSC.EnglishProductSubcategoryName as ProductSubcategoryName , 
+sum(SalesAmount) as Sales, sum(TotalProductCost) as Cost, sum(Freight) as Freight, sum(TaxAmt) as Taxes
+from [dbo].[FactInternetSales] FIS
+	inner join DimSalesTerritory ST on FIS.SalesTerritoryKey = ST.SalesTerritoryKey
+	inner join DimProduct P on FIS.ProductKey = P.ProductKey
+	inner join DimProductSubcategory PSC on P.ProductSubcategoryKey = PSC.ProductSubcategoryKey
+	inner join DimProductCategory PC on PSC.ProductCategoryKey = PC.ProductCategoryKey
+ group by ST.SalesTerritoryRegion, EnglishProductCategoryName, EnglishProductSubcategoryName
+ Order by ST.SalesTerritoryRegion, EnglishProductCategoryName, EnglishProductSubcategoryName
+  
+"
+				Type="SQL"
+				>
+				<GroupFilter
+					DataType="Text"
+					GroupColumn="Region"
+					ID="grpRegion"
+					KeepGroupedRows="True"
+					>
+					<GroupAggregateColumn
+						AggregateColumn="Sales"
+						AggregateFunction="Sum"
+						ID="RegionSales"
+					/>
+				</GroupFilter>
+			</DataLayer>
+			<DataTableColumn
+				Header="Category Name"
+				ID="colProductCategoryName"
+				>
+				<Label
+					Caption="@Data.ProductCategoryName~"
+					ID="lblProductCategoryName"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="ProductCategoryName"
+					DataType="Text"
+				/>
+				<HideDuplicates
+					DataColumn="ProductCategoryName"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Header="Sub Category Name"
+				ID="colSubProductCategoryName"
+				>
+				<Label
+					Caption="@Data.ProductSubcategoryName~"
+					ID="lblSubProductCategoryName"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="ProductSubcategoryName"
+					DataType="Text"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Class="text-right"
+				Header="Sales"
+				ID="colSales"
+				>
+				<Label
+					Caption="@Data.Sales~"
+					Format="Currency"
+					ID="lblSales"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="Sales"
+					DataType="Number"
+				/>
+				<DataColumnSummary
+					DataColumn="Sales"
+					Function="Sum"
+					ID="SalesTotal"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Class="text-right"
+				Header="Cost"
+				ID="colCost"
+				>
+				<Label
+					Caption="@Data.Cost~"
+					Format="Currency"
+					ID="lblCost"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="Cost"
+					DataType="Number"
+				/>
+				<DataColumnSummary
+					DataColumn="Cost"
+					Function="Sum"
+					ID="CostTotal"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Class="text-right"
+				Header="Freight"
+				ID="colFreight"
+				>
+				<Label
+					Caption="@Data.Freight~"
+					Format="Currency"
+					ID="lblFreight"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="Freight"
+					DataType="Number"
+				/>
+				<DataColumnSummary
+					DataColumn="Freight"
+					Function="Sum"
+					ID="FreightTotal"
+				/>
+			</DataTableColumn>
+			<DataTableColumn
+				Class="text-right"
+				Header="Taxes"
+				ID="colTaxes"
+				>
+				<Label
+					Caption="@Data.Taxes~"
+					Format="Currency"
+					ID="lblTaxes"
+					rdForWizardSet="true"
+				/>
+				<DataColumnSort
+					DataColumn="Taxes"
+					DataType="Number"
+				/>
+				<DataColumnSummary
+					DataColumn="Taxes"
+					Function="Sum"
+					ID="TaxesTotal"
+				/>
+			</DataTableColumn>
+			<GroupHeaderRow
+				Class="bg-secondary"
+				GroupFilterID="grpRegion"
+				>
+				<Column
+					Class="border-0 bg-secondary"
+					>
+					<Label
+						Caption="Region: @Data.Region~"
+						Class="font-weight-bold text-light"
+					/>
+				</Column>
+				<Column
+					Class="border-0 bg-secondary"
+					ColSpan="5"
+					>
+					<Label
+						Caption="Total Sales: "
+						Class="font-weight-bold text-light"
+					/>
+					<Label
+						Caption="@Data.RegionSales~"
+						Class="font-weight-bold text-light"
+						Format="Currency"
+					/>
+				</Column>
+			</GroupHeaderRow>
+			<GroupSummaryRow
+				GroupFilterID="grpRegion"
+				>
+				<Column
+					Class="grpRegion-cell-custom"
+					ColSpan="2"
+					>
+					<Label
+						Caption="Total:"
+						Class="font-weight-bold"
+					/>
+				</Column>
+				<Column
+					Class="text-right grpRegion-cell-custom"
+					ColSpan="1"
+					>
+					<Label
+						Caption="@Data.rdGroupSummaryColumn_SalesTotal~"
+						Class="font-weight-bold"
+						Format="Currency"
+					/>
+				</Column>
+				<Column
+					Class="text-right grpRegion-cell-custom"
+					ColSpan="1"
+					>
+					<Label
+						Caption="@Data.rdGroupSummaryColumn_CostTotal~"
+						Class="font-weight-bold"
+						Format="Currency"
+					/>
+				</Column>
+				<Column
+					Class="text-right grpRegion-cell-custom"
+					ColSpan="1"
+					>
+					<Label
+						Caption="@Data.rdGroupSummaryColumn_FreightTotal~"
+						Class="font-weight-bold"
+						Format="Currency"
+					/>
+				</Column>
+				<Column
+					Class="text-right grpRegion-cell-custom"
+					ColSpan="1"
+					>
+					<Label
+						Caption="@Data.rdGroupSummaryColumn_TaxesTotal~"
+						Class="font-weight-bold"
+						Format="Currency"
+					/>
+				</Column>
+			</GroupSummaryRow>
+		</DataTable>
+	</Body>
+	<ideTestParams/>
+</Report>

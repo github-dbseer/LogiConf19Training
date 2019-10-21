@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Process
+	ID="Day4-0-HelloProcess"
+	>
+	<Task
+		ID="ReturnHelloWorld"
+		>
+		<Note
+			Note="Do nothing"
+			>
+			<Note
+				Note="Return a Value to UI"
+			/>
+		</Note>
+		<Response
+			Type="Report"
+			>
+			<Target
+				Report="Processes.Workshop1.Process-helloworld"
+				Type="Report"
+				>
+				<WaitPage/>
+			</Target>
+			<LinkParams
+				ProcessValue="Hello World From Process!"
+				UIInput="@Request.UIInput~ - Kamyar &amp; Shatah Training"
+			/>
+		</Response>
+	</Task>
+	<Task
+		ID="ReturnHelloWorld2"
+		>
+		<Note
+			Note="Do nothing"
+			>
+			<Note
+				Note="Return a Value to UI"
+			/>
+		</Note>
+		<Response
+			Type="Link"
+			>
+			<Target
+				ID="trgGoogle"
+				Link="https://www.google.com"
+				Type="Link"
+			/>
+		</Response>
+	</Task>
+	<ideTestParams
+		rdTaskID=""
+		UIInput=""
+	/>
+</Process>

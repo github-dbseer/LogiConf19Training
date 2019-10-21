@@ -1,0 +1,94 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Embedded Reports on Different Domains</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <h1>Accessing Embedded Reports on Different Domains</h1>
+
+
+
+
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-3">
+                <button type="button" class="btn btn-primary" id="btn-create">Run Report</button>
+            </div>
+
+            <div class="col-lg-3">
+                <input type="text" id="user" class="form-control" placeholder="Username" aria-label="Username">
+            </div>
+            <div class="col-lg-3">
+                <button type="button" class="btn btn-success" id="btn-exec">execEmbeddedFunction</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<!-- The Main Report Container -->
+    <div id="reportContainer"></div>
+
+<!-- Change the src to your logi application URL -->
+    <script src="rdEmbed.js" type="text/Javascript"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+        //create option object
+        var options = {};
+        options.applicationUrl = "http://pokemongoinsight.com";
+        options.report = "Default";
+        options.autoSizing = "all";
+        options.secureKey = "";
+     
+
+        function createReport() {
+            var report = EmbeddedReporting.create("reportContainer", options);
+
+        }
+        function RemoveReport() {
+            EmbeddedReporting.remove('reportContainer');
+        }
+
+        //attach events to the btns 
+        $("#btn-create").click(function () {
+            createReport();
+
+        });
+        //attach events to the btns 
+        $("#btn-remove").click(function () {
+            RemoveReport();
+
+        });
+        $("#btn-exec").click(function () {
+           
+           //calling a function on pokemongoinsight website called Hello
+            var funcName = "hello";
+            var args1 = $("#user").val()
+            
+            var callback = "showResults";
+
+            var report = EmbeddedReporting.get('reportContainer');
+            report.execEmbeddedFunction(funcName, args1, '', callback);
+            // RemoveReport();
+
+        });
+
+        function showResults(result) {
+            alert(JSON.stringify(result, null, 2));
+        }
+    </script>
+</body>
+
+</html>

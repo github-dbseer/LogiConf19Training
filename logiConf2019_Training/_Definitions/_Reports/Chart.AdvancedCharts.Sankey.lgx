@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Chart.AdvancedCharts.Sankey"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<Remark>
+		<IncludeScriptFile
+			IncludedScriptFile="jquery_min.js"
+		/>
+	</Remark>
+	<StyleSheet
+		StyleSheet="sankey.css"
+	/>
+	<Remark>
+		<StyleSheet
+			StyleSheet="Framework.bootstrap.bootstrap.min.css"
+		/>
+	</Remark>
+	<Body>
+		<Division
+			Class="page-container"
+			HtmlDiv="True"
+			ID="pageContainer"
+			>
+			<Division
+				Class="page-content-wrapper"
+				HtmlDiv="True"
+				ID="pageContentWrapper"
+				>
+				<Division
+					Class="page-content"
+					HtmlDiv="True"
+					ID="pageContent"
+					>
+					<Division
+						Class="row "
+						HtmlDiv="True"
+						ID="row"
+						>
+						<Division
+							Class="col-md-12 col-sm-12"
+							HtmlDiv="True"
+							>
+							<Division
+								Class="portlet light "
+								HtmlDiv="True"
+								>
+								<Division
+									Class="portlet-body"
+									HtmlDiv="True"
+									>
+									<Division
+										HtmlDiv="True"
+										ID="sankeyChart"
+									/>
+								</Division>
+							</Division>
+						</Division>
+					</Division>
+				</Division>
+			</Division>
+		</Division>
+		<IncludeScriptFile
+			IncludedScriptFile="https://d3js.org/d3.v3.min.js"
+		/>
+		<IncludeScriptFile
+			IncludedScriptFile="JS.sankey.js"
+		/>
+		<IncludeScriptFile
+			IncludedScriptFile="JS.sankeyChart.js"
+			>
+			<JsonData
+				ID="sankey_json_parser"
+				JsonHumanReadable="True"
+				JsonOutput="Inline"
+				JsonStyle="RowsToValueArrays"
+				JsonVarName="sankeyJson"
+				>
+				<DataLayer
+					ConnectionID="SQLCon"
+					ID="sankey_db"
+					Source="select &apos;Internet Sales&apos; as SalesType,
+	case when SalesTerritoryRegion in (&apos;Northwest&apos;, &apos;Southwest&apos;, &apos;Northeast&apos;, &apos;Southeast&apos;)  then 1 else 2 end as regionid,
+case when SalesTerritoryRegion in (&apos;Northwest&apos;, &apos;Southwest&apos;, &apos;Northeast&apos;, &apos;Southeast&apos;) then &apos;US&apos;
+	 else &apos;International&apos; end as Region, PC.EnglishProductCategoryName,  sum([SalesAmount]) as Sales, 
+	 DENSE_RANK() OVER (ORDER BY EnglishProductCategoryName) as g
+from [dbo].[FactInternetSales] FIS
+	inner join [dbo].[DimProduct] P on FIS.ProductKey = P.ProductKey
+	inner join [dbo].[DimProductSubcategory] PS on P.ProductSubcategoryKey = PS.ProductSubcategoryKey
+	inner join [dbo].[DimProductCategory] PC on PS.ProductCategoryKey = PC.ProductCategoryKey
+	inner join [dbo].[DimSalesTerritory] ST on FIS.SalesTerritoryKey = ST.SalesTerritoryKey
+group by PC.EnglishProductCategoryName,   
+case when SalesTerritoryRegion in (&apos;Northwest&apos;, &apos;Southwest&apos;, &apos;Northeast&apos;, &apos;Southeast&apos;) then &apos;US&apos;
+	 else &apos;International&apos; end ,
+	case when SalesTerritoryRegion in (&apos;Northwest&apos;, &apos;Southwest&apos;, &apos;Northeast&apos;, &apos;Southeast&apos;)  then 1 else 2 end
+union
+select &apos;Reseller Sales&apos; as SalesType,    
+	case when SalesTerritoryRegion in (&apos;Northwest&apos;, &apos;Southwest&apos;, &apos;Northeast&apos;, &apos;Southeast&apos;)  then 1 else 2 end as regionid,
+case when SalesTerritoryRegion in (&apos;Northwest&apos;, &apos;Southwest&apos;, &apos;Northeast&apos;, &apos;Southeast&apos;) then &apos;US&apos;
+	 else &apos;International&apos; end as Region, PC.EnglishProductCategoryName, sum([SalesAmount]) as Sales, 
+	 DENSE_RANK() OVER (ORDER BY EnglishProductCategoryName) as g
+from [dbo].[FactResellerSales] FIS
+	inner join [dbo].[DimProduct] P on FIS.ProductKey = P.ProductKey
+	inner join [dbo].[DimProductSubcategory] PS on P.ProductSubcategoryKey = PS.ProductSubcategoryKey
+	inner join [dbo].[DimProductCategory] PC on PS.ProductCategoryKey = PC.ProductCategoryKey
+	inner join [dbo].[DimSalesTerritory] ST on FIS.SalesTerritoryKey = ST.SalesTerritoryKey
+group by PC.EnglishProductCategoryName,   
+case when SalesTerritoryRegion in (&apos;Northwest&apos;, &apos;Southwest&apos;, &apos;Northeast&apos;, &apos;Southeast&apos;) then &apos;US&apos;
+	 else &apos;International&apos; end ,
+	case when SalesTerritoryRegion in (&apos;Northwest&apos;, &apos;Southwest&apos;, &apos;Northeast&apos;, &apos;Southeast&apos;)  then 1 else 2 end
+order by EnglishProductCategoryName"
+					Type="SQL"
+				/>
+			</JsonData>
+		</IncludeScriptFile>
+	</Body>
+	<ReportFooter/>
+</Report>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Default"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<Body>
+		<Division
+			Class="container h-100 text-center vh-50"
+			HtmlDiv="True"
+			>
+			<Division
+				Class="d-flex align-items-center justify-content-center h-100"
+				HtmlDiv="True"
+				>
+				<Division
+					Class="col-12"
+					HtmlDiv="True"
+					>
+					<Label
+						Caption="Welcome to Logi Training"
+						Class="text-muted text-center"
+						HtmlTag="H1"
+					/>
+				</Division>
+			</Division>
+		</Division>
+	</Body>
+</Report>

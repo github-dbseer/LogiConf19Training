@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Process
+	ID="StartSession"
+	>
+	<Task
+		ID="setSessionVars"
+		>
+		<Procedure
+			ID="GetUserFullName"
+			Type="RunDataLayerRows"
+			>
+			<DataLayer
+				ID="procGetFullUserName"
+				Source="SELECT FirstName + &apos; &apos; + LastName AS FullName
+  FROM [AdventureWorks2017].[HumanResources].[vEmployee]
+WHERE EmailAddress=&apos;@Function.UserName~&apos;
+ "
+				Type="SQL"
+			/>
+			<Procedure
+				ID="setFullUserName"
+				Type="SetSessionVars"
+				>
+				<SessionParams
+					UserFullName="@Data.FullName~"
+				/>
+			</Procedure>
+		</Procedure>
+	</Task>
+	<ideTestParams
+		rdTaskID=""
+	/>
+</Process>

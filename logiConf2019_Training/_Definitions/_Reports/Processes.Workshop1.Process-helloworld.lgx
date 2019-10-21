@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report
+	ID="Training.Day-4-0-Process-helloworld"
+	>
+	<MasterReport
+		Report="MasterReport"
+	/>
+	<Body>
+		<Label
+			Caption="Call Hello world Process"
+			Class="btn btn-secondary  m-2 "
+			ID="btnCallProcess"
+			>
+			<Action
+				ID="actProcess1"
+				Process="Day4-0-HelloProcess"
+				TaskID="ReturnHelloWorld"
+				Type="Process"
+				>
+				<LinkParams
+					UIInput=" I&apos;m Traveling from UI to Process and Back"
+				/>
+			</Action>
+		</Label>
+		<Label
+			Caption="Call Google"
+			Class="btn btn-secondary m-2"
+			ID="btnCallgoogle"
+			>
+			<Action
+				ID="actProcess1"
+				Process="Day4-0-HelloProcess"
+				TaskID="ReturnHelloWorld2"
+				Type="Process"
+			/>
+		</Label>
+		<HR/>
+		<Label
+			Caption="@Request.ProcessValue~"
+			Class="text-muted"
+			HtmlTag="H6"
+		/>
+		<HR/>
+		<Label
+			Caption="@Request.UIInput~"
+			Class="text-muted"
+			HtmlTag="H6"
+		/>
+	</Body>
+	<ideTestParams
+		ProcessValue=""
+		UIInput=""
+	/>
+</Report>
