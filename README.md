@@ -1,33 +1,33 @@
 # LogiConf19Training
-This app has been developed to be a reference in the 2019 Logi Conference. The Conference includes 25 hours of in-depth presentations by solution architects, web developers, support engineers, professional services consultants, and product managers.
+This app has been developed to be a guide for 2019 Logi Conference Training. The Conference includes 25 hours of in-depth presentations by solution architects, web developers, support engineers, professional services consultants, and product managers.
 
 ## Getting Started
 ### 1. Prerequisites
-* [.NET Framework](https://documentation.logianalytics.com/logiinfov12/content/installing-logi-info-on-windows-10.htm#Preparing): Logi products require the .NET Framework components. When Windows is installed, multiple versions of the framework are typically included. Before doing anything else, ensure that you have .NET installed by using File Explorer to browse to:
+* [.NET Framework](https://documentation.logianalytics.com/logiinfov12/content/installing-logi-info-on-windows-10.htm#Preparing): Logi products require .NET Framework components. When Windows is installed, multiple versions of the framework are typically included. Ensure that you have .NET installed by using File Explorer to browse to:
 **C:\Windows\Microsoft.NET\Framework**
-where you should see several folders, such as v4.0.30319, one for each version of .NET installed. The .NET Framework 4.x is required. If it is not already in place, with your consent, appropriate versions of the .NET framework are installed when Logi products are installed. They are also available for free from the Microsoft Download Center.
+where you would see several folders, such as v4.0.30319, one for each version of .NET installed. The .NET Framework 4.x is required for this application. Logi installs .Net Framework when you create a new Logi Application. They are also available for free from the Microsoft Download Center.
 
-* [Enable the IIS Web Server](https://documentation.logianalytics.com/logiinfov12/content/installing-logi-info-on-windows-10.htm#Preparing): this logi application requires to have the IIS installed and enabled.
+* [Enable the IIS Web Server](https://documentation.logianalytics.com/logiinfov12/content/installing-logi-info-on-windows-10.htm#Preparing): The Loogi application also requires IIS to be installed and enabled.
 
 * Install [Logi Info Studio 12.6.089](https://documentation.logianalytics.com/logiinfov12/content/installing-logi-info-on-windows-10.htm#StartInstall).
 
-* Install Microsoft SQL Server Management Studio: this logi application requires some databases that should be imported.
+* Install Microsoft SQL Server Management Studio: The Logi application requires SQL Server Sample Databases to be installed.
 
 
 ### 2. Setting-up the logi Application
 #### 2.1. Create a new blank Logi application:
 
-* Run logi info studio as administrator.
+* Run Logi Info Studio as Administrator.
 * From Home tab , click on **New Application**.
 * Select **Microsoft.Net** as the type of the application.
-* Use **logiConf2019_Training** as the name of the application, please make sure you use the exact name.
+* Use **logiConf2019_Training** as the name of the application. Make sure you use the exact name.
 
 #### 2.2. Setting up the logi application from the training repository:
-* Clone the **LogiConf19Training** repository from github into any place in your machine.
+* Clone the **LogiConf19Training** repository from github.
 * The repository contains three folders, **logiConf2019_Training, Embedded_analytics_html, and security_embedded**:
   * Copy the two folders **Embedded_analytics_html, security_embedded** into **C:\inetpub\wwwroot**
   * Copy all the contents inside the folder **logiConf2019_Training** into **C:\inetpub\wwwroot\logiConf2019_Training**, This will overwrite the existing folders **_Definitions** and **_SupportFiles** in the blank logi application that we created in step 2.1.
-  * Inside **C:\inetpub\wwwroot\logiConf2019_Training** give the following folders a read/write permissions to allow IIS to read/write on those folders , right click on each folder > properties > Choose Security tab > Click Edit > Add IIS_IUSRS > Allow Full Control
+  * Inside **C:\inetpub\wwwroot\logiConf2019_Training** give the following folders a read/write permissions to allow IIS to read/write on those folders. Right click on each folder > properties > Choose Security tab > Click Edit > Add IIS_IUSRS > Allow Full Control
     * rdDownload
     * rdDataCache
     * export
@@ -48,7 +48,7 @@ where you should see several folders, such as v4.0.30319, one for each version o
 * Select SQL Server authentication.
 * Enter the Login name and Password as same as User and Password inside  **C:\inetpub\wwwroot\logiConf2019_Training\_Definitions\_Settings.lgx** file, in Connections element, and click OK.
 * The user you have created is added into **Logins** folder > right click on it > click **Properties**.
-* In **Server Roles** page, chack **public, securityadmin, and sysadmin** boxes.
+* In **Server Roles** page, check **public, securityadmin, and sysadmin** boxes.
 * In **Securables** page > **Explicit** tab > check **Authenticate server, Connect Any Database, Connect SQl, Control server, and Create any database** boxes.
 
 #### 3.2. Download the following databases and copy them to the backup folder under the installation path of the SQL server , ie. C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\Backup:
