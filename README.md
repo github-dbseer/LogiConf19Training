@@ -63,4 +63,4 @@ where you would see several folders, such as v4.0.30319, one for each version of
 * Click **Add** to select backup file.
 * Search for the downloaded files in the backup folder under the installation path of the SQL server > click ok.
 
-#### 3.4. Run [this database script](https://gist.github.com/SSukkar/ebac833504f28d27495baeda25783c49) inside the database **AdventureWorks2016CTP3**, this will create the required Menu/SubMenu tables for the logi application **logiConf2019_Training**, and insert data into them.
+#### 3.4. Run [this database script](https://gist.github.com/github-dbseer/874ae4b86a51771f8e37ad0be2f19444) inside the database **AdventureWorks2016CTP3**, this will create the required Menu/SubMenu tables for the logi application **logiConf2019_Training**, and insert data into them.
